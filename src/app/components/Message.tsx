@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {AppState} from '@src/types/todoApp';
+import {AppState} from '@src/types/application';
 
 type MessageType = {
   message: string;

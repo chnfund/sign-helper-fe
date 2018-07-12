@@ -14,3 +14,8 @@ export type TodoItemState = {
   name: string;
   isComplete: boolean;
 };
+
+export type TabItem = {
+  title: string;
+  isActive: boolean;
+};

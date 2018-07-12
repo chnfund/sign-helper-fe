@@ -2,15 +2,17 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {deleteTodo, fetchTodos, getVisibleTodos, toggleTodo} from '@src/app/reducers/todo';
-import {AppState, TodoItemState} from '@src/types/todoApp';
+import {AppState, TodoItemState} from '@src/types/application';
 
 const TodoItem = ({id, isComplete, name, toggleTodoHandler, deleteTodoHandler}) => (
   <li>
     <span className="delete-item">
       <button onClick={() => deleteTodoHandler(id)}>X</button>
     </span>
-    <input type="checkbox" checked={isComplete}
-           onChange={() => toggleTodoHandler(id)}
+    <input
+      type="checkbox"
+      checked={isComplete}
+      onChange={() => toggleTodoHandler(id)}
     />
     {name}
   </li>
@@ -36,7 +38,8 @@ class TodoList extends React.Component<PropsType> {
           {this.props.todos
             .map(todo =>
               <TodoItem
-                key={todo.id} {...todo}
+                key={todo.id}
+                {...todo}
                 toggleTodoHandler={this.props.toggleTodoHandler}
                 deleteTodoHandler={this.props.deleteTodoHandler}
               />)

@@ -9,7 +9,7 @@ export const colors = {
     lightGray1: '#CDCDCD',
     lightGray2: '#E5E5E5',
     textPrimary: '#E5E5E5',
-    white: '#F1F1F1',
+    white: '#F4F4F4',
     white1: '#F2F3F8',
     white2: '#F7F7F7',
     white3: '#FCFAF9',

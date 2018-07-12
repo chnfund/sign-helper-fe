@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {showMessage} from '@src/app/reducers/message';
 import {saveTodo, updateCurrent} from '@src/app/reducers/todo';
-import {AppState} from '@src/types/todoApp';
+import {AppState} from '@src/types/application';
 
 type TodoFormProps = {
   currentTodo: string;
@@ -26,9 +26,10 @@ class TodoForm extends React.Component<TodoFormProps> {
     };
     return (
       <form onSubmit={handleSubmit}>
-        <input type="text"
-               onChange={handleInputChange}
-               value={currentTodo}
+        <input
+          type="text"
+          onChange={handleInputChange}
+          value={currentTodo}
         />
       </form>
     );

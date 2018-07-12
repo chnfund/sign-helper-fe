@@ -1,6 +1,6 @@
 import {createTodo, destoryTodo, getTodos, updateTodo} from '@src/app/lib/todoServices';
 import {showMessage} from '@src/app/reducers/message';
-import {TodoState} from '@src/types/todoApp';
+import {TodoState} from '@src/types/application';
 
 const initState: TodoState = {
   todos: [],
