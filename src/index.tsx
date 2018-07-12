@@ -3,7 +3,7 @@ import * as ReactDom from 'react-dom';
 
 import {Provider} from 'react-redux';
 
-import TodoApp from '@src/app/components/TodoApp';
+import RootApp from '@src/app/components/RootApp';
 import store from '@src/store';
 
 import mainStyle from '@src/resource/css/main.css';
@@ -17,8 +17,8 @@ ${mainStyle}
 `);
 
 ReactDom.render(
-  <Provider store={store}>
-    <TodoApp/>
-  </Provider>,
-  document.getElementById('root') as HTMLElement
+    <Provider store={store}>
+        <RootApp/>
+    </Provider>,
+    document.getElementById('root') as HTMLElement
 );

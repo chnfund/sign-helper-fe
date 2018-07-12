@@ -16,7 +16,7 @@ type Props = {
   updateCurrent?: (val: any) => void;
 };
 
-class TodoApp extends React.Component<Props> {
+class RootApp extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props);
@@ -42,4 +42,4 @@ class TodoApp extends React.Component<Props> {
   }
 }
 
-export default TodoApp;
+export default RootApp;
