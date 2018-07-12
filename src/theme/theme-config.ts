@@ -1,7 +1,7 @@
 export const colors = {
     primary0: '#171C23',
     inverseTextPrimary: '#171C23',
-    primary: '#1E2530',
+    primary: '#2BA8FB',
     primary1: '#202734',
     primary2: '#2E384B',
     darkGray: '#4B4B4B',

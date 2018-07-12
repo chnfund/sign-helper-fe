@@ -1,92 +1,94 @@
 .App {
-    text-align: center;
+  text-align: center;
 }
 
 .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
+  animation: App-logo-spin infinite 10s linear;
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
 }
 
 .App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-    margin-bottom: 30px;
+  background-color: #222;
+  height: 40px;
+  padding: 5px;
+  color: white;
+  margin-bottom: 30px;
 }
 
 .App-title {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 .App-intro {
-    font-size: large;
+  font-size: large;
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .Todo-App {
-    padding-top: 20px;
-    display: inline-block;
-    text-align: left;
+  padding-top: 20px;
+  display: inline-block;
+  text-align: left;
 }
 
 .Todo-list {
-    width: 400px;
-    margin: 0 auto;
+  width: 400px;
+  margin: 0 auto;
 }
 
 form > input {
-    font-size: 20px;
-    width: 400px;
+  font-size: 20px;
+  width: 400px;
 }
 
 ul {
-    padding: 0;
-    text-align: left;
+  padding: 0;
+  text-align: left;
 }
 
 li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .message {
-    background-color: #61DAFB;
-    color: white;
-    border: solid 1px #61DAFB;
-    position: absolute;
-    text-align: center;
-    width: 200px;
-    left: 50%;
-    margin-left: -100px;
-    top: 200px;
+  background-color: #61DAFB;
+  color: white;
+  border: solid 1px #61DAFB;
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  left: 50%;
+  margin-left: -100px;
+  top: 200px;
 }
 
 li span.delete-item {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 span.delete-item button {
-    background: none;
-    border: none;
-    font-size: 1em;
-    font-weight: bold;
-    text-decoration: none;
-    color: red;
+  background: none;
+  border: none;
+  font-size: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  color: red;
 }
 
 li:hover span.delete-item {
-    visibility: visible;
+  visibility: visible;
 }
 
 a {
-    padding-left: 2px;
-    padding-right: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
 }

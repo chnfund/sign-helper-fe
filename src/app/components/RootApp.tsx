@@ -6,8 +6,6 @@ import Message from '@src/app/components/Message';
 import TodoForm from '@src/app/components/TodoForm';
 import TodoList from '@src/app/components/TodoList';
 
-import * as logo from '@src/resource/image/logo.svg';
-
 type Props = {
   title?: string;
   targetAddress?: string;
@@ -26,8 +24,7 @@ class RootApp extends React.Component<Props> {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">Welcome to React with redux</h1>
+          <div className="App-logo">🍉</div>
         </header>
         <Router>
           <div className="Todo-App">
