@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {authNotPass, authPass, fetchUsers} from '@src/app/reducers/user';
+import {AUTH_WAIT, authNotPass, authPass, fetchUsers, getVisibleUsers} from '@src/app/reducers/user';
 import {AppState, User} from '@src/types/application';
 
 type Props = {
@@ -59,7 +59,7 @@ class UserAuthList extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
-    users: state.users,
+    users: getVisibleUsers(state.users, AUTH_WAIT),
   }),
   {
     fetchUserHandler: fetchUsers,

@@ -62,7 +62,7 @@
       "companyName": "非凡汇基金",
       "role": "研究员",
       "activitySignCount": 0,
-      "authPassed": 0
+      "authPassed": 2
     },
     {
       "id": 2,
@@ -72,7 +72,7 @@
       "companyName": "易方达基金",
       "role": "基金经理",
       "activitySignCount": 0,
-      "authPassed": 0
+      "authPassed": 2
     },
     {
       "id": 3,
@@ -82,7 +82,7 @@
       "companyName": "万事达能源",
       "role": "董秘",
       "activitySignCount": 0,
-      "authPassed": 0
+      "authPassed": 2
     },
     {
       "id": 4,
@@ -91,7 +91,8 @@
       "companyType": "上市公司",
       "companyName": "荣诗琪化工",
       "role": "董秘",
-      "activitySignCount": 4
+      "activitySignCount": 4,
+      "authPassed": 2
     }
   ]
 }

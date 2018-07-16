@@ -1,4 +1,4 @@
-import {createTodo, destoryTodo, getTodos, updateTodo} from '@src/app/lib/todoServices';
+import {createTodo, destroyTodo, getTodos, updateTodo} from '@src/app/lib/todoServices';
 import {showMessage} from '@src/app/reducers/message';
 import {TodoState} from '@src/types/application';
 
@@ -56,7 +56,7 @@ export const toggleTodo = (id) => {
 export const deleteTodo = (id) => {
   return (dispatch) => {
     dispatch(showMessage('Removing Todo'));
-    destoryTodo(id)
+    destroyTodo(id)
       .then(() => dispatch(removeTodo(id)));
   };
 };

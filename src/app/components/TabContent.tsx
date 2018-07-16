@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import UserAuthenList from '@src/app/components/mettingLogic/UserAuthList';
+import UserAuthList from '@src/app/components/mettingLogic/UserAuthList';
 
 type Props = {
   contents: React.ReactNode[];
@@ -16,7 +16,7 @@ class TabContent extends React.Component<Props> {
             <div className="switch-item">活动列表</div>
           </div>
         </div>
-        <UserAuthenList/>
+        <UserAuthList/>
       </div>
     );
   }

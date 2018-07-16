@@ -1,6 +1,10 @@
 import * as userApi from '@src/app/lib/userService';
 import {User} from '@src/types/application';
 
+export const AUTH_WAIT = 2;
+export const AUTH_SUCCESS = 1;
+export const AUTH_FAIL = 0;
+
 const LOAD_USERS = 'LOAD_USERS';
 
 const REPLACE_USER = 'REPLACE_USER';
@@ -35,6 +39,19 @@ export const authNotPass = (id) => {
     userApi.updateUser(tmpUser)
       .then(res => dispatch(replaceUser(res)));
   };
+};
+
+export const getVisibleUsers = (users: User[], authCode) => {
+  switch (authCode) {
+    case AUTH_WAIT:
+      return users.filter(u => u.authPassed === AUTH_WAIT);
+    case AUTH_FAIL:
+      return users.filter(u => u.authPassed === AUTH_FAIL);
+    case AUTH_SUCCESS:
+      return users.filter(u => u.authPassed === AUTH_SUCCESS);
+    default:
+      return users;
+  }
 };
 
 export default (state: User[] = [], action) => {
