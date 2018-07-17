@@ -59,7 +59,7 @@ class UserAuthList extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
-    users: getVisibleUsers(state.users, AUTH_WAIT),
+    users: getVisibleUsers(state.userLogic.users, AUTH_WAIT),
   }),
   {
     fetchUserHandler: fetchUsers,

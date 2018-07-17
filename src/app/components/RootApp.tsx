@@ -5,13 +5,13 @@ import Dialog from '@src/app/components/Dialog';
 import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabContent from '@src/app/components/TabContent';
 import TabNav from '@src/app/components/TabNav';
+import {userAuthUnpassReasonChange} from '@src/app/reducers/user';
+import {AppState} from '@src/types/application';
+import {connect} from 'react-redux';
 
 type Props = {
-  title?: string;
-  targetAddress?: string;
-  pushToTarget?: void;
-  currentTodo?: string;
-  updateCurrent?: (val: any) => void;
+  authUnPassReason: string;
+  authUnpassReasonChange: any;
 };
 
 class RootApp extends React.Component<Props> {
@@ -21,6 +21,13 @@ class RootApp extends React.Component<Props> {
   }
 
   render(): React.ReactNode {
+
+    const {authUnPassReason, authUnpassReasonChange} = this.props;
+
+    const handleReasonChange = (evt) => {
+      const val = evt.target.value;
+      authUnpassReasonChange(val);
+    };
 
     return (
       <div className="App">
@@ -40,7 +47,14 @@ class RootApp extends React.Component<Props> {
         </Router>
         <ModalWrapper>
           <Dialog title="title goes here">
-            this is dialog content.
+            <textarea
+              name=""
+              id=""
+              cols={30}
+              rows={10}
+              value={authUnPassReason}
+              onChange={handleReasonChange}
+            />
           </Dialog>
         </ModalWrapper>
       </div>
@@ -48,4 +62,11 @@ class RootApp extends React.Component<Props> {
   }
 }
 
-export default RootApp;
+export default connect(
+  (state: AppState) => ({
+    authUnPassReason: state.userLogic.authUnPassReason,
+  }),
+  {
+    authUnpassReasonChange: userAuthUnpassReasonChange,
+  }
+)(RootApp);

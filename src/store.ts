@@ -13,7 +13,7 @@ const reducer = combineReducers({
   todo: todoReducer,
   message: messageReducer,
   tab: tabReducer,
-  users: userReducer,
+  userLogic: userReducer,
 });
 
 export default createStore(

@@ -2,7 +2,7 @@ export type AppState = {
   todo: TodoState;
   message: string;
   tab: TabItem[];
-  users: User[];
+  userLogic: UserLogicState;
 };
 
 export type TodoState = {
@@ -21,6 +21,11 @@ export type TabItem = {
   key: number;
   title: string;
   isActive: boolean;
+};
+
+export type UserLogicState = {
+  users: User[];
+  authUnPassReason: string;
 };
 
 export type User = {

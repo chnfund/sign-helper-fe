@@ -29,6 +29,7 @@
     "testRegex": "(/src/|/__tests__/).*\\.(spec|test)\\.(ts|tsx|js)$"
   },
   "dependencies": {
+    "antd": "^3.7.0",
     "classnames": "^2.2.5",
     "normalizr": "^3.2.4",
     "react": "^16.2.0",

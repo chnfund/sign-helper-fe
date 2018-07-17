@@ -1,5 +1,5 @@
 import * as userApi from '@src/app/lib/userService';
-import {User} from '@src/types/application';
+import {User, UserLogicState} from '@src/types/application';
 
 export const AUTH_WAIT = 2;
 export const AUTH_SUCCESS = 1;
@@ -9,8 +9,11 @@ const LOAD_USERS = 'LOAD_USERS';
 
 const REPLACE_USER = 'REPLACE_USER';
 
+const USER_AUTH_UNPASS_REASON_CHANGE = 'USER_AUTH_UNPASS_REASON_CHANGE';
+
 const loadUsers = (users) => ({type: LOAD_USERS, payload: users});
 const replaceUser = (user) => ({type: REPLACE_USER, payload: user});
+export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REASON_CHANGE, payload: txt});
 
 export const fetchUsers = () => {
   return (dispatch) => {
@@ -54,12 +57,20 @@ export const getVisibleUsers = (users: User[], authCode) => {
   }
 };
 
-export default (state: User[] = [], action) => {
+export default (
+  state: UserLogicState = {
+    users: [],
+    authUnPassReason: '',
+  },
+  action
+) => {
   switch (action.type) {
     case LOAD_USERS:
-      return action.payload;
+      return {...state, users: action.payload};
     case REPLACE_USER:
-      return state.map(u => u.id === action.payload.id ? action.payload : u);
+      return {...state, users: state.users.map(u => u.id === action.payload.id ? action.payload : u)};
+    case USER_AUTH_UNPASS_REASON_CHANGE:
+      return {...state, authUnPassReason: action.payload};
     default:
       return state;
   }
