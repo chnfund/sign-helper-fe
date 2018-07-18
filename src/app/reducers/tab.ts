@@ -35,7 +35,7 @@ const initState = {
   }, {
     id: 4,
     title: '通过',
-    isActive: false,
+    isActive: true,
     parentId: 1,
     relContent: TAB_AUTH_SUCCESS,
   }, {
@@ -72,9 +72,15 @@ export default (state: TabLogicState = initState, action) => {
       return {
         ...state,
         tabs: state.tabs.map(
-          t => t.id === action.payload.id && action.payload.isActive === false
-            ? {...action.payload, isActive: true}
-            : {...t, isActive: false}
+          t => {
+            if (t.id === action.payload.id && action.payload.isActive === false) {
+              return {...action.payload, isActive: true};
+            } else if (t.parentId === action.payload.parentId) {
+              return {...t, isActive: false};
+            } else {
+              return t;
+            }
+          }
         ),
       };
     default:
