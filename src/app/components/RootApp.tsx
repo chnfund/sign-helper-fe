@@ -57,14 +57,14 @@ class RootApp extends React.Component<Props> {
         </header>
         <Router>
           <div className="main-space-wrapper">
-            <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler}/>
+            <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler} second={false}/>
             <div className="main-space">
               <div className="user-activity-switch-wrapper content-row">
                 {/*<div className="switch-item-group">*/}
-                  {/*<div className="switch-item active">待审核用户</div>*/}
-                  {/*<div className="switch-item">活动列表</div>*/}
+                {/*<div className="switch-item active">待审核用户</div>*/}
+                {/*<div className="switch-item">活动列表</div>*/}
                 {/*</div>*/}
-                <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler}/>
+                <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler} second={true}/>
               </div>
               <UserAuthList/>
             </div>

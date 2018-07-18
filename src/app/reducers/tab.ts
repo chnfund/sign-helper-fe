@@ -8,6 +8,8 @@ const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USERS_WAIT_FOR_AUTH';
 const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
 
 const initState = {
+  currentRelContent : null,
+  lastRelContent : null,
   tabs: [{
     id: 0,
     title: '待审核',

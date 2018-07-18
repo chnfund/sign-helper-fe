@@ -5,13 +5,14 @@ import {TabItem} from '@src/types/application';
 type Props = {
   tabs: TabItem[];
   toggleTabHandler: any;
+  second: boolean;
 };
 
 class TabNav extends React.Component<Props> {
 
   render() {
 
-    const {toggleTabHandler} = this.props;
+    const {toggleTabHandler, second, tabs} = this.props;
 
     // we can get customized param & event object in this way
     const clickHandler = (tabItem) => (evt) => {
@@ -21,13 +22,13 @@ class TabNav extends React.Component<Props> {
     };
 
     return (
-      <div className="tab-nav">
+      <div className={second ? 'switch-item-group' : 'tab-nav'}>
         {
-          this.props.tabs.map(
+          tabs.map(
             t => (
               <div
                 key={t.id}
-                className={'tab-nav-item' + (t.isActive ? ' active' : '')}
+                className={second ? 'switch-item' + (t.isActive ? ' active' : '') : 'tab-nav-item' + (t.isActive ? ' active' : '')}
                 onClick={clickHandler(t)}
               >
                 {t.title}
