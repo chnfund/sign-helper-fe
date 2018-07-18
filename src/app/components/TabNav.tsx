@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-import {toggleTab} from '@src/app/reducers/tab';
-import {AppState, TabItem} from '@src/types/application';
-import {connect} from 'react-redux';
+import {TabItem} from '@src/types/application';
 
 type Props = {
   tabs: TabItem[];
@@ -28,7 +26,7 @@ class TabNav extends React.Component<Props> {
           this.props.tabs.map(
             t => (
               <div
-                key={t.key}
+                key={t.id}
                 className={'tab-nav-item' + (t.isActive ? ' active' : '')}
                 onClick={clickHandler(t)}
               >
@@ -42,11 +40,4 @@ class TabNav extends React.Component<Props> {
   }
 }
 
-export default connect(
-  (state: AppState) => ({
-    tabs: state.tab,
-  }),
-  {
-    toggleTabHandler: toggleTab,
-  }
-)(TabNav);
+export default TabNav;

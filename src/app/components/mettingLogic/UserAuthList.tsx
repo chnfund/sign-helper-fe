@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {AUTH_WAIT, authNotPass, authPass, fetchUsers, getVisibleUsers} from '@src/app/reducers/user';
+import {AUTH_WAIT, authPass, fetchUsers, getVisibleUsers, showAuthUnpassDialog} from '@src/app/reducers/user';
 import {AppState, User} from '@src/types/application';
 
 type Props = {
   users: User[];
   fetchUserHandler: any;
   authPassHandler: any;
-  authNotPassHandler: any;
+  showAuthUnpassDialogHandler: any;
 };
 
 class UserAuthList extends React.Component<Props> {
@@ -17,7 +17,7 @@ class UserAuthList extends React.Component<Props> {
   }
 
   render() {
-    const {users, authPassHandler, authNotPassHandler} = this.props;
+    const {users, authPassHandler, showAuthUnpassDialogHandler} = this.props;
 
     return (
       <div className="user-authen-list">
@@ -46,7 +46,8 @@ class UserAuthList extends React.Component<Props> {
             </div>
             <div className="table-row-part">
               <div className="button-group-wrapper">
-                <button className="operate-btn btn-warn" onClick={() => authNotPassHandler(user.id)}>不通过</button>
+                <button className="operate-btn btn-warn" onClick={() => showAuthUnpassDialogHandler(user.id)}>不通过
+                </button>
                 <button className="operate-btn btn-info" onClick={() => authPassHandler(user.id)}>通过</button>
               </div>
             </div>
@@ -64,6 +65,6 @@ export default connect(
   {
     fetchUserHandler: fetchUsers,
     authPassHandler: authPass,
-    authNotPassHandler: authNotPass,
+    showAuthUnpassDialogHandler: showAuthUnpassDialog,
   }
 )(UserAuthList);

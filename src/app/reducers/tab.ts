@@ -1,25 +1,82 @@
-import {TabItem} from '@src/types/application';
+import {AppState, TabLogicState} from '@src/types/application';
 
-const initState = [{
-  key: 0,
-  title: '待审核',
-  isActive: true,
-}, {
-  key: 1,
-  title: '已审核',
-  isActive: false,
-}];
+const TAB_WAIT_FOR_AUTH = 'TAB_WAIT_FOR_AUTH';
+const TAB_AUTH_COMPLETED = 'TAB_AUTH_COMPLETED';
+const TAB_AUTH_SUCCESS = 'TAB_AUTH_SUCCESS';
+const TAB_AUTH_FAIL = 'TAB_AUTH_FAIL';
+const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USERS_WAIT_FOR_AUTH';
+const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
+
+const initState = {
+  tabs: [{
+    id: 0,
+    title: '待审核',
+    isActive: true,
+    parentId: null,
+    relContent: TAB_WAIT_FOR_AUTH,
+  }, {
+    id: 1,
+    title: '已审核',
+    isActive: false,
+    parentId: null,
+    relContent: TAB_AUTH_COMPLETED,
+  }, {
+    id: 2,
+    title: '待审核用户',
+    isActive: true,
+    parentId: 0,
+    relContent: TAB_USER_LIST_WAIT_FOR_AUTH,
+  }, {
+    id: 3,
+    title: '活动列表',
+    isActive: false,
+    parentId: 0,
+    relContent: TAB_ACTIVITY_LIST,
+  }, {
+    id: 4,
+    title: '通过',
+    isActive: false,
+    parentId: 1,
+    relContent: TAB_AUTH_SUCCESS,
+  }, {
+    id: 5,
+    title: '不通过',
+    isActive: false,
+    parentId: 1,
+    relContent: TAB_AUTH_FAIL,
+  }],
+};
+
+export const getVisibleTabs = (state: AppState, tabLevel: number) => {
+  const {tabs} = state.tabLogic;
+  let activeParentTabId = 0;
+  const tmpTabs = tabs.filter(t => t.parentId === null && t.isActive === true);
+  if (tmpTabs.length > 0) {
+    activeParentTabId = tmpTabs[0].id;
+  }
+  if (tabLevel === 1) {
+    return tabs.filter(t => t.parentId === null);
+  } else if (tabLevel === 2) {
+    return tabs.filter(t => t.parentId !== null && t.parentId === activeParentTabId);
+  }
+  return [];
+};
 
 const TOGGLE_TAB = 'TOGGLE_TAB';
 
 export const toggleTab = (tab) => ({type: TOGGLE_TAB, payload: tab});
 
-export default (state: TabItem[] = initState, action) => {
+export default (state: TabLogicState = initState, action) => {
   switch (action.type) {
     case TOGGLE_TAB:
-      return state.map(t =>
-        t.key === action.payload.key && action.payload.isActive === false
-          ? {...action.payload, isActive: true} : {...t, isActive: false});
+      return {
+        ...state,
+        tabs: state.tabs.map(
+          t => t.id === action.payload.id && action.payload.isActive === false
+            ? {...action.payload, isActive: true}
+            : {...t, isActive: false}
+        ),
+      };
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 export type AppState = {
   todo: TodoState;
   message: string;
-  tab: TabItem[];
+  tabLogic: TabLogicState;
   userLogic: UserLogicState;
 };
 
@@ -17,15 +17,21 @@ export type TodoItemState = {
   isComplete: boolean;
 };
 
+export type TabLogicState = {
+  tabs: TabItem[];
+};
+
 export type TabItem = {
-  key: number;
+  id: number;
   title: string;
   isActive: boolean;
+  parentId: number;
+  relContent: string;
 };
 
 export type UserLogicState = {
   users: User[];
-  authUnPassReason: string;
+  authUnpassInfo: AuthUnpassInfo;
 };
 
 export type User = {
@@ -37,4 +43,10 @@ export type User = {
   role: string;
   activitySignCount: number;
   authPassed: number;
+};
+
+export type AuthUnpassInfo = {
+  userId: string;
+  authUnPassReason: string;
+  unpassDialogShow: false;
 };

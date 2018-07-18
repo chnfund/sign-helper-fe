@@ -1,9 +1,16 @@
 import * as React from 'react';
 
-class ModalWrapper extends React.Component {
+type Props = {
+  show: boolean;
+};
+
+class ModalWrapper extends React.Component<Props> {
   render() {
+
+    const {show} = this.props;
+
     return (
-      <div className="modal-hover">
+      <div className={'modal-hover' + (show ? '' : ' hidden')}>
         <div className="modal-content">
           {this.props.children}
         </div>

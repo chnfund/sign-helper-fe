@@ -12,7 +12,7 @@ import {createBrowserHistory} from 'history';
 const reducer = combineReducers({
   todo: todoReducer,
   message: messageReducer,
-  tab: tabReducer,
+  tabLogic: tabReducer,
   userLogic: userReducer,
 });
 
