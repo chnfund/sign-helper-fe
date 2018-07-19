@@ -1,9 +1,21 @@
 import * as userApi from '@src/app/lib/userService';
-import {User, UserLogicState} from '@src/types/application';
+import {AppState, User, UserLogicState} from '@src/types/application';
+
+import {
+  getRelContentPayload,
+  TAB_AUTH_FAIL,
+  TAB_AUTH_SUCCESS,
+  TAB_USER_LIST_WAIT_FOR_AUTH
+} from '@src/app/reducers/tab';
 
 export const AUTH_WAIT = 2;
 export const AUTH_SUCCESS = 1;
 export const AUTH_FAIL = 0;
+
+export const COMPANY_TYPE = {
+  LIST: 1,
+  INSTI: 2,
+};
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -21,7 +33,7 @@ export const userAuthUnpassConfirm = () => {
   return (dispatch, getState) => {
     const {userLogic} = getState();
     const user: User = userLogic.users.find(t => t.id === userLogic.authUnpassInfo.userId);
-    const tmpUser: User = {...user, authPassed: 0};
+    const tmpUser: User = {...user, authState: 0};
     userApi.updateUser(tmpUser)
       .then(res => dispatch(replaceUser(res)));
   };
@@ -38,25 +50,28 @@ export const fetchUsers = () => {
 
 export const authPass = (id) => {
   return (dispatch, getState) => {
-    const {users} = getState();
+    const {users} = getState().userLogic;
     const user: User = users.find(t => t.id === id);
-    const tmpUser: User = {...user, authPassed: 1};
+    const tmpUser: User = {...user, authState: 1};
     userApi.updateUser(tmpUser)
       .then(res => dispatch(replaceUser(res)));
   };
 };
 
-export const getVisibleUsers = (users: User[], authCode) => {
-  switch (authCode) {
-    case AUTH_WAIT:
-      return users.filter(u => u.authPassed === AUTH_WAIT);
-    case AUTH_FAIL:
-      return users.filter(u => u.authPassed === AUTH_FAIL);
-    case AUTH_SUCCESS:
-      return users.filter(u => u.authPassed === AUTH_SUCCESS);
+export const getVisibleUsers = (state: AppState, users: User[]) => {
+  const relContent = getRelContentPayload(state);
+
+  switch (relContent) {
+    case TAB_USER_LIST_WAIT_FOR_AUTH:
+      return users.filter(u => u.authState === AUTH_WAIT);
+    case TAB_AUTH_FAIL:
+      return users.filter(u => u.authState === AUTH_FAIL);
+    case TAB_AUTH_SUCCESS:
+      return users.filter(u => u.authState === AUTH_SUCCESS);
     default:
       return users;
   }
+
 };
 
 export default (

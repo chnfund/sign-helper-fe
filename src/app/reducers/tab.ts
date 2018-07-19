@@ -1,15 +1,15 @@
 import {AppState, TabLogicState} from '@src/types/application';
 
-const TAB_WAIT_FOR_AUTH = 'TAB_WAIT_FOR_AUTH';
-const TAB_AUTH_COMPLETED = 'TAB_AUTH_COMPLETED';
-const TAB_AUTH_SUCCESS = 'TAB_AUTH_SUCCESS';
-const TAB_AUTH_FAIL = 'TAB_AUTH_FAIL';
-const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USERS_WAIT_FOR_AUTH';
-const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
+export const TAB_WAIT_FOR_AUTH = 'TAB_WAIT_FOR_AUTH';
+export const TAB_AUTH_COMPLETED = 'TAB_AUTH_COMPLETED';
+export const TAB_AUTH_SUCCESS = 'TAB_AUTH_SUCCESS';
+export const TAB_AUTH_FAIL = 'TAB_AUTH_FAIL';
+export const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USER_LIST_WAIT_FOR_AUTH';
+export const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
 
 const initState = {
-  currentRelContent : null,
-  lastRelContent : null,
+  currentRelContent: null,
+  lastRelContent: null,
   tabs: [{
     id: 0,
     title: '待审核',
@@ -62,6 +62,20 @@ export const getVisibleTabs = (state: AppState, tabLevel: number) => {
     return tabs.filter(t => t.parentId !== null && t.parentId === activeParentTabId);
   }
   return [];
+};
+
+export const getRelContentPayload = (state: AppState) => {
+  const {tabs} = state.tabLogic;
+  let activeParentTabId = 0;
+  const tmpTabs = tabs.filter(t => t.parentId === null && t.isActive === true);
+  if (tmpTabs.length > 0) {
+    activeParentTabId = tmpTabs[0].id;
+  }
+  const tmpActiveSecondTab = tabs.filter(t => t.parentId === activeParentTabId && t.isActive === true);
+  if (tmpActiveSecondTab.length > 0) {
+    return tmpActiveSecondTab[0].relContent;
+  }
+  return TAB_USER_LIST_WAIT_FOR_AUTH;
 };
 
 const TOGGLE_TAB = 'TOGGLE_TAB';

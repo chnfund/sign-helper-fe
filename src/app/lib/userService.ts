@@ -1,10 +1,10 @@
 export const getUsers = () => {
-  return fetch('http://localhost:8080/users')
+  return fetch('http://localhost:8080/user')
     .then(res => res.json());
 };
 
 export const updateUser = (user) => {
-  return fetch(`http://localhost:8080/users/${user.id}`, {
+  return fetch(`http://localhost:8080/user/${user.id}`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',

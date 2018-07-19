@@ -1,7 +1,13 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {AUTH_WAIT, authPass, fetchUsers, getVisibleUsers, showAuthUnpassDialog} from '@src/app/reducers/user';
+import {
+  AUTH_FAIL, AUTH_SUCCESS,
+  authPass, COMPANY_TYPE,
+  fetchUsers,
+  getVisibleUsers,
+  showAuthUnpassDialog
+} from '@src/app/reducers/user';
 import {AppState, User} from '@src/types/application';
 
 type Props = {
@@ -19,8 +25,62 @@ class UserAuthList extends React.Component<Props> {
   render() {
     const {users, authPassHandler, showAuthUnpassDialogHandler} = this.props;
 
+    const genUserOpBtns = (user: User) => {
+
+      const authFailBtn = (tmpUser: User) => {
+        return (tmpUser.authState !== AUTH_FAIL ? (
+          <button
+            className="operate-btn btn-warn"
+            onClick={() => showAuthUnpassDialogHandler(tmpUser.id)}
+          >
+            不通过
+          </button>) : <button className="operate-btn" disabled={true}>不通过</button>);
+      };
+
+      const authSuccessBtn = (tmpUser: User) => {
+        if (tmpUser.companyType === COMPANY_TYPE.INSTI) {
+          return (
+            <button
+              className={'operate-btn' + (tmpUser.authState !== AUTH_SUCCESS ? ' btn-info' : '')}
+              disabled={tmpUser.authState === AUTH_SUCCESS}
+              onClick={() => authPassHandler(tmpUser.id)}
+            >
+              通过
+            </button>
+          );
+        } else {
+          return (
+            <div>
+              <button
+                className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
+                disabled={tmpUser.isIR === 1}
+                onClick={() => authPassHandler(tmpUser.id)} // TODO IR/NOIR action.
+              >
+                IR
+              </button>
+              <button
+                className={'operate-btn' + (tmpUser.isIR !== 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
+                disabled={tmpUser.isIR !== 1}
+                onClick={() => authPassHandler(tmpUser.id)}
+              >
+                非IR
+              </button>
+            </div>
+          );
+        }
+      };
+
+      return (
+        <div className="button-group-wrapper">
+          {authFailBtn(user)}
+          {authSuccessBtn(user)}
+        </div>
+      );
+
+    };
+
     return (
-      <div className="user-authen-list">
+      <div>
         <div className="table-header content-row">
           <span className="table-header-item text-align-left">用户个人资料 | 来源</span>
           <span className="table-header-item">审核结果</span>
@@ -45,11 +105,7 @@ class UserAuthList extends React.Component<Props> {
               </div>
             </div>
             <div className="table-row-part">
-              <div className="button-group-wrapper">
-                <button className="operate-btn btn-warn" onClick={() => showAuthUnpassDialogHandler(user.id)}>不通过
-                </button>
-                <button className="operate-btn btn-info" onClick={() => authPassHandler(user.id)}>通过</button>
-              </div>
+              {genUserOpBtns(user)}
             </div>
           </div>
         ))}
@@ -59,12 +115,15 @@ class UserAuthList extends React.Component<Props> {
 }
 
 export default connect(
-  (state: AppState) => ({
-    users: getVisibleUsers(state.userLogic.users, AUTH_WAIT),
+  (
+    state: AppState
+  ) => ({
+    users: getVisibleUsers(state, state.userLogic.users),
   }),
   {
     fetchUserHandler: fetchUsers,
     authPassHandler: authPass,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
   }
-)(UserAuthList);
+)
+(UserAuthList);

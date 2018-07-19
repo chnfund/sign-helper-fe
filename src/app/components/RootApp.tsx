@@ -3,14 +3,26 @@ import {connect} from 'react-redux';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 import Dialog from '@src/app/components/Dialog';
+import ActivityList from '@src/app/components/mettingLogic/ActivityList';
 import UserAuthList from '@src/app/components/mettingLogic/UserAuthList';
 import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabNav from '@src/app/components/TabNav';
-import {getVisibleTabs, toggleTab} from '@src/app/reducers/tab';
-import {userAuthUnpassConfirm, userAuthUnpassOpeCancel, userAuthUnpassReasonChange} from '@src/app/reducers/user';
+import {
+  getRelContentPayload,
+  getVisibleTabs,
+  TAB_ACTIVITY_LIST, TAB_AUTH_FAIL, TAB_AUTH_SUCCESS,
+  TAB_USER_LIST_WAIT_FOR_AUTH,
+  toggleTab
+} from '@src/app/reducers/tab';
+import {
+  userAuthUnpassConfirm,
+  userAuthUnpassOpeCancel,
+  userAuthUnpassReasonChange
+} from '@src/app/reducers/user';
 import {AppState, TabItem} from '@src/types/application';
 
 type Props = {
+  currentRelContent: string;
   authUnPassReason: string;
   unpassDialogShow: boolean;
   firstLevelTabs: TabItem[];
@@ -38,11 +50,27 @@ class RootApp extends React.Component<Props> {
       unpassOpeCancelHandler,
       unpassOpeConfirmHandler,
       toggleTabHandler,
+      currentRelContent,
     } = this.props;
 
     const handleReasonChange = (evt) => {
       const val = evt.target.value;
       authUnpassReasonChange(val);
+    };
+
+    const getRelComponent = (relContent) => {
+      switch (relContent) {
+        case TAB_USER_LIST_WAIT_FOR_AUTH:
+          return <UserAuthList/>;
+        case TAB_ACTIVITY_LIST:
+          return <ActivityList/>;
+        case TAB_AUTH_SUCCESS:
+          return <UserAuthList/>;
+        case TAB_AUTH_FAIL:
+          return <UserAuthList/>;
+        default:
+          return <UserAuthList/>;
+      }
     };
 
     return (
@@ -62,7 +90,7 @@ class RootApp extends React.Component<Props> {
               <div className="user-activity-switch-wrapper content-row">
                 <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler} second={true}/>
               </div>
-              <UserAuthList/>
+              {getRelComponent(currentRelContent)}
             </div>
           </div>
         </Router>
@@ -93,6 +121,7 @@ export default connect(
     unpassDialogShow: state.userLogic.authUnpassInfo.unpassDialogShow,
     firstLevelTabs: getVisibleTabs(state, 1),
     secondLevelTabs: getVisibleTabs(state, 2),
+    currentRelContent: getRelContentPayload(state),
   }),
   {
     authUnpassReasonChange: userAuthUnpassReasonChange,

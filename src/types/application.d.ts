@@ -3,6 +3,7 @@ export type AppState = {
   message: string;
   tabLogic: TabLogicState;
   userLogic: UserLogicState;
+  activityLogic: ActivityLogicState;
 };
 
 export type TodoState = {
@@ -18,6 +19,8 @@ export type TodoItemState = {
 };
 
 export type TabLogicState = {
+  currentRelContent: string;
+  lastRelContent: string;
   tabs: TabItem[];
 };
 
@@ -38,11 +41,27 @@ export type User = {
   id: number;
   name: string;
   phoneNumber: number;
-  companyType: string;
+  companyType: number;
   companyName: string;
+  companySubTypeName: string;
   role: string;
   activitySignCount: number;
-  authPassed: number;
+  authState: number;
+  isIR: number;
+  authFailReason: string;
+};
+
+export type ActivityLogicState = {
+  activities: Activity[];
+};
+
+export type Activity = {
+  id: number;
+  title: string;
+  publisher: string;
+  publisherRole: string;
+  activityStartDate: string;
+  signCount: number;
 };
 
 export type AuthUnpassInfo = {
