@@ -55,7 +55,7 @@ class UserAuthList extends React.Component<Props> {
               <button
                 className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
                 disabled={tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS}
-                onClick={() => setIRAndAuthPassHandler(tmpUser.id, true)} // TODO IR/NOIR action.
+                onClick={() => setIRAndAuthPassHandler(tmpUser.id, true)}
               >
                 IR
               </button>

@@ -1,26 +1,4 @@
 {
-  "todos": [
-    {
-      "id": 1,
-      "name": "Render static UI",
-      "isComplete": false
-    },
-    {
-      "id": 4,
-      "name": "Add json-server to project",
-      "isComplete": true
-    },
-    {
-      "id": 5,
-      "name": "Use redux-thunk middleware to get data",
-      "isComplete": true
-    },
-    {
-      "name": "宝庆给延生调麦克风",
-      "isComplete": false,
-      "id": 6
-    }
-  ],
   "activity": [
     {
       "id": 1,

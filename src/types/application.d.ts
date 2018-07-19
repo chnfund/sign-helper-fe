@@ -1,21 +1,8 @@
 export type AppState = {
-  todo: TodoState;
   message: string;
   tabLogic: TabLogicState;
   userLogic: UserLogicState;
   activityLogic: ActivityLogicState;
-};
-
-export type TodoState = {
-  todos: TodoItemState[];
-  currentTodo: string;
-  filter: string;
-};
-
-export type TodoItemState = {
-  id: number;
-  name: string;
-  isComplete: boolean;
 };
 
 export type TabLogicState = {
