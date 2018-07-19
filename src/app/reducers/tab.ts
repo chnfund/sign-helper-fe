@@ -52,9 +52,9 @@ const initState = {
 export const getVisibleTabs = (state: AppState, tabLevel: number) => {
   const {tabs} = state.tabLogic;
   let activeParentTabId = 0;
-  const tmpTabs = tabs.filter(t => t.parentId === null && t.isActive === true);
-  if (tmpTabs.length > 0) {
-    activeParentTabId = tmpTabs[0].id;
+  const tmpTab = tabs.find(t => t.parentId === null && t.isActive === true);
+  if (tmpTab.id >= 0) {
+    activeParentTabId = tmpTab.id;
   }
   if (tabLevel === 1) {
     return tabs.filter(t => t.parentId === null);
@@ -67,13 +67,13 @@ export const getVisibleTabs = (state: AppState, tabLevel: number) => {
 export const getRelContentPayload = (state: AppState) => {
   const {tabs} = state.tabLogic;
   let activeParentTabId = 0;
-  const tmpTabs = tabs.filter(t => t.parentId === null && t.isActive === true);
-  if (tmpTabs.length > 0) {
-    activeParentTabId = tmpTabs[0].id;
+  const tmpTab = tabs.find(t => t.parentId === null && t.isActive === true);
+  if (tmpTab !== null) {
+    activeParentTabId = tmpTab.id;
   }
-  const tmpActiveSecondTab = tabs.filter(t => t.parentId === activeParentTabId && t.isActive === true);
-  if (tmpActiveSecondTab.length > 0) {
-    return tmpActiveSecondTab[0].relContent;
+  const tmpActiveSecondTab = tabs.find(t => t.parentId === activeParentTabId && t.isActive === true);
+  if (tmpActiveSecondTab.id >= 0) {
+    return tmpActiveSecondTab.relContent;
   }
   return TAB_USER_LIST_WAIT_FOR_AUTH;
 };
