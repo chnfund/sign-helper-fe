@@ -71,7 +71,8 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 0,
-      "authState": 1
+      "authState": 0,
+      "isIR": 0
     },
     {
       "id": 4,
@@ -82,6 +83,51 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 4,
+      "authState": 1,
+      "isIR": 0
+    },
+    {
+      "id": 5,
+      "name": "李金华",
+      "phoneNumber": "18787475677",
+      "companyType": 1,
+      "companyName": "荣诗琪化工",
+      "companySubTypeName": "上市公司",
+      "role": "董秘",
+      "activitySignCount": 0,
+      "authState": 2
+    },
+    {
+      "id": 6,
+      "name": "李金华",
+      "phoneNumber": "18787475677",
+      "companyType": 1,
+      "companyName": "荣诗琪化工",
+      "companySubTypeName": "上市公司",
+      "role": "董秘",
+      "activitySignCount": 3,
+      "authState": 2
+    },
+    {
+      "id": 7,
+      "name": "李金华",
+      "phoneNumber": "18787475677",
+      "companyType": 2,
+      "companyName": "荣诗琪化工",
+      "companySubTypeName": "基金",
+      "role": "董秘",
+      "activitySignCount": 0,
+      "authState": 2
+    },
+    {
+      "id": 8,
+      "name": "李金华",
+      "phoneNumber": "18787475677",
+      "companyType": 1,
+      "companyName": "荣诗琪化工",
+      "companySubTypeName": "上市公司",
+      "role": "董秘",
+      "activitySignCount": 6,
       "authState": 2
     }
   ]

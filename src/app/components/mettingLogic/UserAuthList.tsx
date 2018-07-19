@@ -5,7 +5,7 @@ import {
   AUTH_FAIL, AUTH_SUCCESS,
   authPass, COMPANY_TYPE,
   fetchUsers,
-  getVisibleUsers,
+  getVisibleUsers, setIRAndAuthPass,
   showAuthUnpassDialog
 } from '@src/app/reducers/user';
 import {AppState, User} from '@src/types/application';
@@ -15,6 +15,7 @@ type Props = {
   fetchUserHandler: any;
   authPassHandler: any;
   showAuthUnpassDialogHandler: any;
+  setIRAndAuthPassHandler: any;
 };
 
 class UserAuthList extends React.Component<Props> {
@@ -23,7 +24,7 @@ class UserAuthList extends React.Component<Props> {
   }
 
   render() {
-    const {users, authPassHandler, showAuthUnpassDialogHandler} = this.props;
+    const {users, authPassHandler, showAuthUnpassDialogHandler, setIRAndAuthPassHandler} = this.props;
 
     const genUserOpBtns = (user: User) => {
 
@@ -53,15 +54,15 @@ class UserAuthList extends React.Component<Props> {
             <div>
               <button
                 className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR === 1}
-                onClick={() => authPassHandler(tmpUser.id)} // TODO IR/NOIR action.
+                disabled={tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS}
+                onClick={() => setIRAndAuthPassHandler(tmpUser.id, true)} // TODO IR/NOIR action.
               >
                 IR
               </button>
               <button
                 className={'operate-btn' + (tmpUser.isIR !== 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR !== 1}
-                onClick={() => authPassHandler(tmpUser.id)}
+                disabled={tmpUser.isIR !== 1 && tmpUser.authState === AUTH_SUCCESS}
+                onClick={() => setIRAndAuthPassHandler(tmpUser.id, false)}
               >
                 非IR
               </button>
@@ -91,7 +92,7 @@ class UserAuthList extends React.Component<Props> {
               <div className="company-card-img-holder float-left"/>
               <div className="custom-info float-left">
                 <div className="flex-1">
-                  {user.companyType}
+                  {user.companySubTypeName}
                   {!(user.activitySignCount > 0) ?
                     '' :
                     <div className="activity-sign-count">签到过{user.activitySignCount}场会议</div>}
@@ -124,6 +125,7 @@ export default connect(
     fetchUserHandler: fetchUsers,
     authPassHandler: authPass,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
+    setIRAndAuthPassHandler: setIRAndAuthPass,
   }
 )
 (UserAuthList);

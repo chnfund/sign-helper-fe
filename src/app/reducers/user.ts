@@ -17,6 +17,11 @@ export const COMPANY_TYPE = {
   INSTI: 2,
 };
 
+export const IR_ENUM = {
+  NOT_IR: 0,
+  IS_IR: 1,
+};
+
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
 const USER_AUTH_UNPASS_REASON_CHANGE = 'USER_AUTH_UNPASS_REASON_CHANGE';
@@ -53,6 +58,16 @@ export const authPass = (id) => {
     const {users} = getState().userLogic;
     const user: User = users.find(t => t.id === id);
     const tmpUser: User = {...user, authState: 1};
+    userApi.updateUser(tmpUser)
+      .then(res => dispatch(replaceUser(res)));
+  };
+};
+
+export const setIRAndAuthPass = (id, irOrNot: boolean) => {
+  return (dispatch, getState) => {
+    const {users} = getState().userLogic;
+    const user: User = users.find(t => t.id === id);
+    const tmpUser: User = {...user, authState: 1, isIR: irOrNot ? IR_ENUM.IS_IR : IR_ENUM.NOT_IR};
     userApi.updateUser(tmpUser)
       .then(res => dispatch(replaceUser(res)));
   };
