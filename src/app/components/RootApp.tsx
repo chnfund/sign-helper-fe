@@ -2,11 +2,11 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {BrowserRouter as Router} from 'react-router-dom';
 
+import ActivityList from '@src/app/components/ActivityList';
 import Dialog from '@src/app/components/Dialog';
-import ActivityList from '@src/app/components/mettingLogic/ActivityList';
-import UserAuthList from '@src/app/components/mettingLogic/UserAuthList';
 import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabNav from '@src/app/components/TabNav';
+import UserAuthList from '@src/app/components/UserAuthList';
 import {
   getRelContentPayload,
   getVisibleTabs,

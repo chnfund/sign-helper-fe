@@ -7,8 +7,8 @@ import {
   fetchUsers,
   getVisibleUsers, setIRAndAuthPass,
   showAuthUnpassDialog
-} from '@src/app/reducers/user';
-import {AppState, User} from '@src/types/application';
+} from '../reducers/user';
+import {AppState, User} from '../../types/application';
 
 type Props = {
   users: User[];
