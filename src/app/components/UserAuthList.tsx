@@ -1,14 +1,16 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
+import {COMPANY_TYPE} from '@src/app/commons/const';
+import {showSignedActivity} from '@src/app/reducers/app';
+import {AppState, User} from '@src/types/application';
 import {
   AUTH_FAIL, AUTH_SUCCESS,
-  authPass, COMPANY_TYPE,
+  authPass,
   fetchUsers,
   getVisibleUsers, setIRAndAuthPass,
   showAuthUnpassDialog
 } from '../reducers/user';
-import {AppState, User} from '../../types/application';
 
 type Props = {
   users: User[];
@@ -16,6 +18,7 @@ type Props = {
   authPassHandler: any;
   showAuthUnpassDialogHandler: any;
   setIRAndAuthPassHandler: any;
+  showSignedActivityHandler: any;
 };
 
 class UserAuthList extends React.Component<Props> {
@@ -24,7 +27,13 @@ class UserAuthList extends React.Component<Props> {
   }
 
   render() {
-    const {users, authPassHandler, showAuthUnpassDialogHandler, setIRAndAuthPassHandler} = this.props;
+    const {
+      users,
+      authPassHandler,
+      showAuthUnpassDialogHandler,
+      setIRAndAuthPassHandler,
+      showSignedActivityHandler,
+    } = this.props;
 
     const genUserOpBtns = (user: User) => {
 
@@ -39,7 +48,7 @@ class UserAuthList extends React.Component<Props> {
       };
 
       const authSuccessBtn = (tmpUser: User) => {
-        if (tmpUser.companyType === COMPANY_TYPE.INSTI) {
+        if (tmpUser.companyType === COMPANY_TYPE.Insti) {
           return (
             <button
               className={'operate-btn' + (tmpUser.authState !== AUTH_SUCCESS ? ' btn-info' : '')}
@@ -95,7 +104,13 @@ class UserAuthList extends React.Component<Props> {
                   {user.companySubTypeName}
                   {!(user.activitySignCount > 0) ?
                     '' :
-                    <div className="activity-sign-count">签到过{user.activitySignCount}场会议</div>}
+                    <div
+                      className="activity-sign-count"
+                      onClick={() => showSignedActivityHandler(user.id)}
+                    >
+                      签到过{user.activitySignCount}场会议
+                    </div>
+                  }
                 </div>
                 <div className="flex-1">
                   {user.name}&nbsp;&nbsp;{user.phoneNumber}
@@ -126,6 +141,7 @@ export default connect(
     authPassHandler: authPass,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
     setIRAndAuthPassHandler: setIRAndAuthPass,
+    showSignedActivityHandler: showSignedActivity,
   }
 )
 (UserAuthList);

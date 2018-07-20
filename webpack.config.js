@@ -114,13 +114,16 @@ module.exports = {
   devServer:
     {
       contentBase: sourcePath,
-      hot:
-        true,
-      stats:
-        {
-          warnings: false
-        }
-      ,
+      hot: true,
+      stats: {
+        warnings: false
+      },
+      allowedHosts: [
+        'lucas.com',
+        'lucas.s3.natapp.cc',
+        'j44rjx.natappfree.cc',
+        '192.168.1.110',
+      ]
     }
   ,
   node: {

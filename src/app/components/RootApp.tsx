@@ -7,14 +7,21 @@ import Dialog from '@src/app/components/Dialog';
 import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabNav from '@src/app/components/TabNav';
 import UserAuthList from '@src/app/components/UserAuthList';
+
 import {
   getRelContentPayload,
+  TAB_ACTIVITY_LIST, TAB_AUTH_FAIL,
+  TAB_AUTH_SUCCESS,
+  TAB_USER_LIST_WAIT_FOR_AUTH
+} from '@src/app/reducers/app';
+import {
   getVisibleTabs,
-  TAB_ACTIVITY_LIST, TAB_AUTH_FAIL, TAB_AUTH_SUCCESS,
-  TAB_USER_LIST_WAIT_FOR_AUTH,
   toggleTab
 } from '@src/app/reducers/tab';
 import {
+  getCaptcha,
+  loginCaptchaC,
+  loginPhoneNC, loginSubmit,
   userAuthUnpassConfirm,
   userAuthUnpassOpeCancel,
   userAuthUnpassReasonChange
@@ -25,12 +32,19 @@ type Props = {
   currentRelContent: string;
   authUnPassReason: string;
   unpassDialogShow: boolean;
+  appLoginNeeded: boolean;
   firstLevelTabs: TabItem[];
   secondLevelTabs: TabItem[];
   authUnpassReasonChange: any;
   unpassOpeCancelHandler: () => any;
   unpassOpeConfirmHandler: () => any;
   toggleTabHandler: () => any;
+  loginPhoneNumber: string;
+  loginCaptcha: string;
+  loginPhoneNCHandler: any;
+  loginCaptchaCHandler: any;
+  getCaptchaHandler: any;
+  loginSubmitHandler: any;
 };
 
 class RootApp extends React.Component<Props> {
@@ -44,6 +58,7 @@ class RootApp extends React.Component<Props> {
     const {
       authUnPassReason,
       unpassDialogShow,
+      appLoginNeeded,
       firstLevelTabs,
       secondLevelTabs,
       authUnpassReasonChange,
@@ -51,11 +66,27 @@ class RootApp extends React.Component<Props> {
       unpassOpeConfirmHandler,
       toggleTabHandler,
       currentRelContent,
+      loginPhoneNumber,
+      loginCaptcha,
+      loginPhoneNCHandler,
+      loginCaptchaCHandler,
+      getCaptchaHandler,
+      loginSubmitHandler,
     } = this.props;
 
     const handleReasonChange = (evt) => {
       const val = evt.target.value;
       authUnpassReasonChange(val);
+    };
+
+    const handleLoginPhoneNumberChange = (evt) => {
+      const val = evt.target.value;
+      loginPhoneNCHandler(val);
+    };
+
+    const handleLoginCaptchaChange = (evt) => {
+      const val = evt.target.value;
+      loginCaptchaCHandler(val);
     };
 
     const getRelComponent = (relContent) => {
@@ -96,7 +127,7 @@ class RootApp extends React.Component<Props> {
         </Router>
         <ModalWrapper show={unpassDialogShow}>
           <Dialog
-            title="title goes here"
+            title="不通过原因"
             cancelHandler={unpassOpeCancelHandler}
             confirmHandler={unpassOpeConfirmHandler}
           >
@@ -110,6 +141,14 @@ class RootApp extends React.Component<Props> {
             />
           </Dialog>
         </ModalWrapper>
+        <ModalWrapper show={appLoginNeeded}>
+          <label>手机号</label>
+          <input type="text" value={loginPhoneNumber} onChange={handleLoginPhoneNumberChange}/>
+          <label>验证码</label>
+          <input type="text" value={loginCaptcha} onChange={handleLoginCaptchaChange}/>
+          <button onClick={getCaptchaHandler}>获取验证码</button>
+          <button className="operate-btn btn-info" onClick={loginSubmitHandler}>登陆</button>
+        </ModalWrapper>
       </div>
     );
   }
@@ -119,14 +158,21 @@ export default connect(
   (state: AppState) => ({
     authUnPassReason: state.userLogic.authUnpassInfo.authUnPassReason,
     unpassDialogShow: state.userLogic.authUnpassInfo.unpassDialogShow,
+    appLoginNeeded: state.userLogic.login.token == null,
     firstLevelTabs: getVisibleTabs(state, 1),
     secondLevelTabs: getVisibleTabs(state, 2),
     currentRelContent: getRelContentPayload(state),
+    loginPhoneNumber: state.userLogic.login.loginPhoneNumber,
+    loginCaptcha: state.userLogic.login.loginCaptcha,
   }),
   {
     authUnpassReasonChange: userAuthUnpassReasonChange,
     unpassOpeCancelHandler: userAuthUnpassOpeCancel,
     unpassOpeConfirmHandler: userAuthUnpassConfirm,
     toggleTabHandler: toggleTab,
+    loginPhoneNCHandler: loginPhoneNC,
+    loginCaptchaCHandler: loginCaptchaC,
+    getCaptchaHandler: getCaptcha,
+    loginSubmitHandler: loginSubmit,
   }
 )(RootApp);

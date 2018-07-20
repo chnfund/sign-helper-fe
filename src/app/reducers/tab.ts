@@ -1,11 +1,10 @@
+import {
+  TAB_ACTIVITY_LIST,
+  TAB_AUTH_COMPLETED, TAB_AUTH_FAIL, TAB_AUTH_SUCCESS,
+  TAB_USER_LIST_WAIT_FOR_AUTH,
+  TAB_WAIT_FOR_AUTH
+} from '@src/app/reducers/app';
 import {AppState, TabLogicState} from '@src/types/application';
-
-export const TAB_WAIT_FOR_AUTH = 'TAB_WAIT_FOR_AUTH';
-export const TAB_AUTH_COMPLETED = 'TAB_AUTH_COMPLETED';
-export const TAB_AUTH_SUCCESS = 'TAB_AUTH_SUCCESS';
-export const TAB_AUTH_FAIL = 'TAB_AUTH_FAIL';
-export const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USER_LIST_WAIT_FOR_AUTH';
-export const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
 
 const initState = {
   currentRelContent: null,
@@ -62,20 +61,6 @@ export const getVisibleTabs = (state: AppState, tabLevel: number) => {
     return tabs.filter(t => t.parentId !== null && t.parentId === activeParentTabId);
   }
   return [];
-};
-
-export const getRelContentPayload = (state: AppState) => {
-  const {tabs} = state.tabLogic;
-  let activeParentTabId = 0;
-  const tmpTab = tabs.find(t => t.parentId === null && t.isActive === true);
-  if (tmpTab !== null) {
-    activeParentTabId = tmpTab.id;
-  }
-  const tmpActiveSecondTab = tabs.find(t => t.parentId === activeParentTabId && t.isActive === true);
-  if (tmpActiveSecondTab.id >= 0) {
-    return tmpActiveSecondTab.relContent;
-  }
-  return TAB_USER_LIST_WAIT_FOR_AUTH;
 };
 
 const TOGGLE_TAB = 'TOGGLE_TAB';

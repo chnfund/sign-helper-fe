@@ -3,6 +3,16 @@ export type AppState = {
   tabLogic: TabLogicState;
   userLogic: UserLogicState;
   activityLogic: ActivityLogicState;
+  appLogic: AppLogicState;
+};
+
+export type AppLogicState = {
+  superModeContent: string;
+  isSuperModeActive: boolean;
+  superModeData: {
+    userList: User[];
+    activityList: Activity[];
+  };
 };
 
 export type TabLogicState = {
@@ -20,6 +30,11 @@ export type TabItem = {
 };
 
 export type UserLogicState = {
+  login: {
+    loginPhoneNumber: string;
+    loginCaptcha: string;
+    token: string;
+  };
   users: User[];
   authUnpassInfo: AuthUnpassInfo;
 };

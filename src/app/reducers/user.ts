@@ -1,3 +1,4 @@
+import {USER_CATEGORY} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {AppState, User, UserLogicState} from '@src/types/application';
 
@@ -6,33 +7,33 @@ import {
   TAB_AUTH_FAIL,
   TAB_AUTH_SUCCESS,
   TAB_USER_LIST_WAIT_FOR_AUTH
-} from '@src/app/reducers/tab';
+} from '@src/app/reducers/app';
 
 export const AUTH_WAIT = 2;
 export const AUTH_SUCCESS = 1;
 export const AUTH_FAIL = 0;
-
-export const COMPANY_TYPE = {
-  LIST: 1,
-  INSTI: 2,
-};
-
-export const IR_ENUM = {
-  NOT_IR: 0,
-  IS_IR: 1,
-};
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
 const USER_AUTH_UNPASS_REASON_CHANGE = 'USER_AUTH_UNPASS_REASON_CHANGE';
 const USER_AUTH_UNPASS_CANCEL = 'USER_AUTH_UNPASS_CANCEL';
 const SHOW_AUTH_UNPASS_DIALOG = 'SHOW_AUTH_UNPASS_DIALOG';
+const LOGIN_PHONE_NUMBER_CHANGE = 'LOGIN_PHONE_NUMBER_CHANGE';
+const LOGIN_CAPTCHA_CHANGE = 'LOGIN_CAPTCHA_CHANGE';
+const SHOW_WAIT_CAPTCHA_MESSAGE = 'SHOW_WAIT_CAPTCHA_MESSAGE';
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const SHOW_MESSAGE = 'SHOW_MESSAGE';
 
 const loadUsers = (users) => ({type: LOAD_USERS, payload: users});
 const replaceUser = (user) => ({type: REPLACE_USER, payload: user});
 export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REASON_CHANGE, payload: txt});
 export const userAuthUnpassOpeCancel = () => ({type: USER_AUTH_UNPASS_CANCEL});
 export const showAuthUnpassDialog = (id) => ({type: SHOW_AUTH_UNPASS_DIALOG, payload: id});
+export const loginPhoneNC = (txt) => ({type: LOGIN_PHONE_NUMBER_CHANGE, payload: txt});
+export const loginCaptchaC = (txt) => ({type: LOGIN_CAPTCHA_CHANGE, payload: txt});
+const showWaitCaptchaMessage = () => ({type: SHOW_WAIT_CAPTCHA_MESSAGE});
+const loginSuccess = (token) => ({type: LOGIN_SUCCESS, payload: token});
+const showMessage = (msg) => ({type: SHOW_MESSAGE, payload: msg});
 
 export const userAuthUnpassConfirm = () => {
   return (dispatch, getState) => {
@@ -63,11 +64,41 @@ export const authPass = (id) => {
   };
 };
 
+export const getCaptcha = () => {
+  return (dispatch, getState) => {
+    const {loginPhoneNumber} = getState().userLogic.login;
+    userApi.requestCaptcha(loginPhoneNumber)
+      .then(res => {
+        if (res.success) {
+          dispatch(showWaitCaptchaMessage());
+        }
+      });
+  };
+};
+
+export const loginSubmit = () => {
+  return (dispatch, getState) => {
+    const {loginPhoneNumber, loginCaptcha} = getState().userLogic.login;
+    userApi.loginSubmit(loginPhoneNumber, loginCaptcha)
+      .then(res => {
+        if (res.success) {
+          dispatch(loginSuccess(res.data));
+        } else {
+          dispatch(showMessage(res.data));
+        }
+      });
+  };
+};
+
 export const setIRAndAuthPass = (id, irOrNot: boolean) => {
   return (dispatch, getState) => {
     const {users} = getState().userLogic;
     const user: User = users.find(t => t.id === id);
-    const tmpUser: User = {...user, authState: 1, isIR: irOrNot ? IR_ENUM.IS_IR : IR_ENUM.NOT_IR};
+    const tmpUser: User = {
+      ...user,
+      authState: 1,
+      isIR: irOrNot ? USER_CATEGORY.Company.IR : USER_CATEGORY.Company.NONE_IR,
+    };
     userApi.updateUser(tmpUser)
       .then(res => dispatch(replaceUser(res)));
   };
@@ -91,6 +122,12 @@ export const getVisibleUsers = (state: AppState, users: User[]) => {
 
 export default (
   state: UserLogicState = {
+    login: {
+      token: '2233',
+      // token: null,
+      loginPhoneNumber: '',
+      loginCaptcha: '',
+    },
     users: [],
     authUnpassInfo: {
       userId: '',
@@ -139,6 +176,31 @@ export default (
           userId: '',
           authUnPassReason: '',
           unpassDialogShow: false,
+        },
+      };
+    case LOGIN_PHONE_NUMBER_CHANGE:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          loginPhoneNumber: action.payload,
+        },
+      };
+    case LOGIN_CAPTCHA_CHANGE:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          loginCaptcha: action.payload,
+        },
+      };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        login: {
+          loginCaptcha: '',
+          loginPhoneNumber: '',
+          token: action.payload,
         },
       };
     default:

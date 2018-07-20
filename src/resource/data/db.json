@@ -49,8 +49,8 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 0,
-      "authState": 0,
-      "isIR": 0
+      "authState": 1,
+      "isIR": 1
     },
     {
       "id": 4,
@@ -61,8 +61,8 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 4,
-      "authState": 1,
-      "isIR": 0
+      "authState": 0,
+      "isIR": 1
     },
     {
       "id": 5,
@@ -73,7 +73,8 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 0,
-      "authState": 2
+      "authState": 1,
+      "isIR": 2
     },
     {
       "id": 6,
@@ -84,7 +85,8 @@
       "companySubTypeName": "上市公司",
       "role": "董秘",
       "activitySignCount": 3,
-      "authState": 2
+      "authState": 1,
+      "isIR": 1
     },
     {
       "id": 7,
