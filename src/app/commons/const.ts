@@ -1,3 +1,4 @@
+export const TOKEN_KEY = 'token';
 // 系统代码
 export const SYS_CODE = {
   // 用户未登录

@@ -1,5 +1,6 @@
 import {push} from 'react-router-redux';
 
+import {TOKEN_KEY} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {SecurityLogicState} from '@src/types/application';
 
@@ -29,11 +30,13 @@ export const getCaptcha = () => {
 
 export const loginSubmit = () => {
   return (dispatch, getState) => {
-    const {loginPhoneNumber, loginCaptcha} = getState().userLogic.login;
+    const {loginPhoneNumber, loginCaptcha} = getState().securityLogic;
     userApi.loginSubmit(loginPhoneNumber, loginCaptcha)
       .then(res => {
         if (res.success) {
+          localStorage.setItem(TOKEN_KEY, res.data);
           dispatch(loginSuccess(res.data));
+          dispatch(push('application'));
         } else {
           dispatch(showMessage(res.data));
         }
@@ -42,19 +45,18 @@ export const loginSubmit = () => {
 };
 
 export const verifyToken = () => {
-  return (dispatch, getState) => {
-    // const {userLogic} = getState();
-    // const token = userLogic.token;
-    // if (token === null) {
+  return (dispatch) => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (token === null) {
       dispatch(push('auth'));
-    // }
+    } else {
+      dispatch(push('application'));
+    }
   };
 };
 
 export default (
   state: SecurityLogicState = {
-    token: null,
-    // token: null,
     loginPhoneNumber: '',
     loginCaptcha: '',
   },

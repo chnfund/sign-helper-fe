@@ -1,9 +1,12 @@
 html body {
   background-color: #F4F4F4;
+  font-size: 14px;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .hidden {
@@ -343,8 +346,8 @@ html body {
   width: 158px;
   height: 76px;
   margin: 18px 10px 18px 5px;
-  font-size: 14px;
-  line-height: 25px;
+  font-size: 12px;
+  line-height: 20px;
 }
 
 .button-group-wrapper {
@@ -365,6 +368,10 @@ html body {
 
 .btn-info {
   background-color: #2AA9F9;
+}
+
+.btn-success {
+  background-color: #26AB28;
 }
 
 .btn-warn {
@@ -439,4 +446,64 @@ li:hover span.delete-item {
 a {
   padding-left: 2px;
   padding-right: 2px;
+}
+
+.loginBg {
+  background-color: #F4F8FB;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+.login-dialog {
+  background-color: #FFFFFF;
+  width: 366px;
+  height: 322px;
+  box-shadow: 1px 1px 20px #ababab;
+  margin: 200px auto;
+}
+
+.login-dialog-header {
+  height: 60px;
+  border-bottom: 2px solid #E5E5E5;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 58px;
+  line-height: 60px;
+}
+
+.login-dialog-content {
+  height: 260px;
+  width: 366px;
+}
+
+.login-phone-number, .login-captcha, .login-confirm-btn{
+  width: 250px;
+  height: 40px;
+  padding: 10px;
+  font-size: 14px;
+  margin: 40px 58px 0 58px;
+  border: 1px solid #B2B2B2;
+  border-radius: 2px;
+}
+
+.login-captcha {
+  width: 150px;
+  margin-top: 20px;
+  margin-right: 0;
+}
+
+.login-get-captcha {
+  height: 40px;
+  width: 100px;
+  margin: 20px 0 0 0;
+  padding: 12px;
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+}
+
+.login-confirm-btn {
+  margin-top: 20px;
 }

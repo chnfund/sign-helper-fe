@@ -5,7 +5,6 @@ import {getCaptcha, loginCaptchaC, loginPhoneNC, loginSubmit} from '@src/app/red
 import {AppState} from '@src/types/application';
 
 type Props = {
-  appLoginNeeded: boolean;
   loginPhoneNumber: string;
   loginCaptcha: string;
   loginPhoneNCHandler: any;
@@ -36,13 +35,30 @@ class Login extends React.Component<Props> {
     };
 
     return (
-      <div>
-        <label>手机号</label>
-        <input type="text" value={loginPhoneNumber} onChange={handleLoginPhoneNumberChange}/>
-        <label>验证码</label>
-        <input type="text" value={loginCaptcha} onChange={handleLoginCaptchaChange}/>
-        <button onClick={getCaptchaHandler}>获取验证码</button>
-        <button className="operate-btn btn-info" onClick={loginSubmitHandler}>登陆</button>
+      <div className="loginBg">
+        <div className="login-dialog">
+          <div className="login-dialog-header">
+            登陆小程序审核后台
+          </div>
+          <div className="login-dialog-content">
+            <input
+              type="text"
+              className="login-phone-number"
+              placeholder="手机号"
+              value={loginPhoneNumber}
+              onChange={handleLoginPhoneNumberChange}
+            />
+            <input
+              type="text"
+              className="login-captcha"
+              placeholder="验证码"
+              value={loginCaptcha}
+              onChange={handleLoginCaptchaChange}
+            />
+            <button className="login-get-captcha" onClick={getCaptchaHandler}>获取验证码</button>
+            <button className="operate-btn btn-success login-confirm-btn" onClick={loginSubmitHandler}>登陆</button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -50,7 +66,6 @@ class Login extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
-    appLoginNeeded: state.securityLogic.token == null,
     loginPhoneNumber: state.securityLogic.loginPhoneNumber,
     loginCaptcha: state.securityLogic.loginCaptcha,
   }),

@@ -1,13 +1,5 @@
-import {USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
-import {AppState, User, UserLogicState} from '@src/types/application';
-
-import {
-  getRelContentPayload,
-  TAB_AUTH_DENY,
-  TAB_AUTH_PASS,
-  TAB_USER_LIST_WAIT_FOR_AUTH
-} from '@src/app/reducers/app';
+import {User, UserLogicState} from '@src/types/application';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -21,63 +13,33 @@ export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REAS
 export const userAuthUnpassOpeCancel = () => ({type: USER_AUTH_UNPASS_CANCEL});
 export const showAuthUnpassDialog = (id) => ({type: SHOW_AUTH_UNPASS_DIALOG, payload: id});
 
-export const userAuthUnpassConfirm = () => {
-  return (dispatch, getState) => {
-    const {userLogic} = getState();
-    const user: User = userLogic.users.find(t => t.id === userLogic.authUnpassInfo.userId);
-    const tmpUser: User = {...user, authState: 0};
-    userApi.updateUser(tmpUser)
-      .then(res => dispatch(replaceUser(res)));
-  };
-};
-
-export const fetchUsers = () => {
+export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
-    userApi.getUsers(dispatch)
-      .then((users) =>
-        dispatch(loadUsers(users))
+    userApi.getUsers(authState, pageIndex)
+      .then((res) =>
+        dispatch(loadUsers(res.data))
       );
   };
 };
 
-export const authPass = (id) => {
+export const authUser = (id, authState, userCategory) => {
   return (dispatch, getState) => {
-    const {users} = getState().userLogic;
-    const user: User = users.find(t => t.id === id);
-    const tmpUser: User = {...user, authState: 1};
-    userApi.updateUser(tmpUser)
-      .then(res => dispatch(replaceUser(res)));
-  };
-};
-
-export const setIRAndAuthPass = (id, irOrNot: boolean) => {
-  return (dispatch, getState) => {
-    const {users} = getState().userLogic;
+    const {users, authUnpassInfo} = getState().userLogic;
     const user: User = users.find(t => t.id === id);
     const tmpUser: User = {
       ...user,
-      authState: 1,
-      isIR: irOrNot ? USER_CATEGORY.Company.IR : USER_CATEGORY.Company.NONE_IR,
+      authenticateState: authState,
+      userCategory: userCategory,
+      authenticateDenyReason: authUnpassInfo.authUnPassReason,
     };
-    userApi.updateUser(tmpUser)
-      .then(res => dispatch(replaceUser(res)));
+    userApi.authUserFetch(
+      tmpUser.id,
+      tmpUser.authenticateState,
+      tmpUser.userCategory,
+      tmpUser.authenticateDenyReason
+    )
+      .then(res => dispatch(replaceUser(tmpUser)));
   };
-};
-
-export const getVisibleUsers = (state: AppState, users: User[]) => {
-  const relContent = getRelContentPayload(state);
-
-  switch (relContent) {
-    case TAB_USER_LIST_WAIT_FOR_AUTH:
-      return users.filter(u => u.authState === USER_AUTH_STATE.NONE);
-    case TAB_AUTH_DENY:
-      return users.filter(u => u.authState === USER_AUTH_STATE.DENY);
-    case TAB_AUTH_PASS:
-      return users.filter(u => u.authState === USER_AUTH_STATE.PASS);
-    default:
-      return users;
-  }
-
 };
 
 export default (

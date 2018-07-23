@@ -51,6 +51,7 @@ class ActivityList extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
+
   }),
   {
     fetchActivityHandler: fetchActivity,

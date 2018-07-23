@@ -1,43 +1,41 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {COMPANY_TYPE, USER_AUTH_STATE} from '@src/app/commons/const';
+import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
 import {showSignedActivity} from '@src/app/reducers/app';
 import {AppState, User} from '@src/types/application';
 import {
-  authPass,
+  authUser,
   fetchUsers,
-  setIRAndAuthPass,
   showAuthUnpassDialog
 } from '../reducers/user';
 
 type Props = {
+  authState: number;
   users: User[];
   fetchUserHandler: any;
-  authPassHandler: any;
+  authUserHandler: (id: number, authState: number, userCategory: number) => any;
   showAuthUnpassDialogHandler: any;
-  setIRAndAuthPassHandler: any;
   showSignedActivityHandler: any;
 };
 
 class UserAuthList extends React.Component<Props> {
   componentDidMount() {
-    this.props.fetchUserHandler();
+    this.props.fetchUserHandler(this.props.authState, 1);
   }
 
   render() {
     const {
       users,
-      authPassHandler,
+      authUserHandler,
       showAuthUnpassDialogHandler,
-      setIRAndAuthPassHandler,
       showSignedActivityHandler,
     } = this.props;
 
     const genUserOpBtns = (user: User) => {
 
       const authFailBtn = (tmpUser: User) => {
-        return (tmpUser.authState !== USER_AUTH_STATE.DENY ? (
+        return (tmpUser.authenticateState !== USER_AUTH_STATE.DENY ? (
           <button
             className="operate-btn btn-warn"
             onClick={() => showAuthUnpassDialogHandler(tmpUser.id)}
@@ -50,9 +48,9 @@ class UserAuthList extends React.Component<Props> {
         if (tmpUser.companyType === COMPANY_TYPE.Insti) {
           return (
             <button
-              className={'operate-btn' + (tmpUser.authState !== USER_AUTH_STATE.PASS ? ' btn-info' : '')}
-              disabled={tmpUser.authState === USER_AUTH_STATE.PASS}
-              onClick={() => authPassHandler(tmpUser.id)}
+              className={'operate-btn' + (tmpUser.authenticateState !== USER_AUTH_STATE.PASS ? ' btn-info' : '')}
+              disabled={tmpUser.authenticateState === USER_AUTH_STATE.PASS}
+              onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, null)}
             >
               通过
             </button>
@@ -61,16 +59,16 @@ class UserAuthList extends React.Component<Props> {
           return (
             <div>
               <button
-                className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR === 1 && tmpUser.authState === USER_AUTH_STATE.PASS}
-                onClick={() => setIRAndAuthPassHandler(tmpUser.id, true)}
+                className={'operate-btn' + (tmpUser.userCategory === USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                disabled={tmpUser.userCategory === USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS}
+                onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, USER_CATEGORY.Company.IR)}
               >
                 IR
               </button>
               <button
-                className={'operate-btn' + (tmpUser.isIR !== 1 && tmpUser.authState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR !== 1 && tmpUser.authState === USER_AUTH_STATE.PASS}
-                onClick={() => setIRAndAuthPassHandler(tmpUser.id, false)}
+                className={'operate-btn' + (tmpUser.userCategory !== USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                disabled={tmpUser.userCategory !== USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS}
+                onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, USER_CATEGORY.Company.NONE_IR)}
               >
                 非IR
               </button>
@@ -101,21 +99,24 @@ class UserAuthList extends React.Component<Props> {
               <div className="custom-info float-left">
                 <div className="flex-1">
                   {user.companySubTypeName}
-                  {!(user.activitySignCount > 0) ?
+                  {!(user.signinCount > 0) ?
                     '' :
                     <div
                       className="activity-sign-count"
                       onClick={() => showSignedActivityHandler(user.id)}
                     >
-                      签到过{user.activitySignCount}场会议
+                      签到过{user.signinCount}场会议
                     </div>
                   }
                 </div>
                 <div className="flex-1">
-                  {user.name}&nbsp;&nbsp;{user.phoneNumber}
+                  {user.fullName}&nbsp;&nbsp;{user.position}
                 </div>
                 <div className="flex-1">
-                  {user.companyName}&nbsp;&nbsp;{user.role}
+                  {user.mobile}
+                </div>
+                <div className="flex-1">
+                  {user.companyName}
                 </div>
               </div>
             </div>
@@ -133,12 +134,12 @@ export default connect(
   (
     state: AppState
   ) => ({
+    users: state.userLogic.users,
   }),
   {
     fetchUserHandler: fetchUsers,
-    authPassHandler: authPass,
+    authUserHandler: authUser,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
-    setIRAndAuthPassHandler: setIRAndAuthPass,
     showSignedActivityHandler: showSignedActivity,
   }
 )

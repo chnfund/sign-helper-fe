@@ -7,6 +7,7 @@ import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabNav from '@src/app/components/TabNav';
 import UserAuthList from '@src/app/components/UserAuthList';
 
+import {USER_AUTH_STATE} from '@src/app/commons/const';
 import {
   getRelContentPayload, SUPER_ACTIVITY_LIST, SUPER_ACTIVITY_USER_LIST,
   TAB_ACTIVITY_LIST, TAB_AUTH_DENY,
@@ -18,12 +19,11 @@ import {
   toggleTab
 } from '@src/app/reducers/tab';
 import {
-  getVisibleUsers,
-  userAuthUnpassConfirm,
   userAuthUnpassOpeCancel,
   userAuthUnpassReasonChange
 } from '@src/app/reducers/user';
-import {Activity, AppState, TabItem, User} from '@src/types/application';
+
+import {Activity, AppState, TabItem} from '@src/types/application';
 
 type Props = {
   currentRelContent: string;
@@ -33,8 +33,6 @@ type Props = {
   secondLevelTabs: TabItem[];
   activities: Activity[];
   superActivities: Activity[];
-  users: User[];
-  superUsers: User[];
   authUnpassReasonChange: any;
   unpassOpeCancelHandler: () => any;
   unpassOpeConfirmHandler: () => any;
@@ -55,8 +53,6 @@ class Application extends React.Component<Props> {
       secondLevelTabs,
       activities,
       superActivities,
-      users,
-      superUsers,
       authUnpassReasonChange,
       unpassOpeCancelHandler,
       unpassOpeConfirmHandler,
@@ -72,24 +68,24 @@ class Application extends React.Component<Props> {
     const getRelComponent = (relContent) => {
       switch (relContent) {
         case TAB_USER_LIST_WAIT_FOR_AUTH:
-          return <UserAuthList users={users}/>;
+          return <UserAuthList authState={USER_AUTH_STATE.NONE}/>;
         case TAB_ACTIVITY_LIST:
           return <ActivityList activities={activities}/>;
         case TAB_AUTH_PASS:
-          return <UserAuthList users={users}/>;
+          return <UserAuthList authState={USER_AUTH_STATE.PASS}/>;
         case TAB_AUTH_DENY:
-          return <UserAuthList users={users}/>;
+          return <UserAuthList authState={USER_AUTH_STATE.DENY}/>;
         case SUPER_ACTIVITY_LIST:
           return <div><ActivityList activities={superActivities}/></div>;
         case SUPER_ACTIVITY_USER_LIST:
           return (
             <div>
               <ActivityList activities={superActivities}/>
-              <UserAuthList users={superUsers}/>
+              <UserAuthList authState={USER_AUTH_STATE.NONE}/>
             </div>
           );
         default:
-          return <UserAuthList users={users}/>;
+          return <UserAuthList authState={USER_AUTH_STATE.NONE}/>;
       }
     };
 
@@ -103,21 +99,21 @@ class Application extends React.Component<Props> {
           <div className="App-logo float-left">🐯</div>
           <div className="App-logo float-left">🐯</div>
         </header>
-          <div className="main-space-wrapper">
-            <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler} second={false}/>
-            <div className="main-space">
-              <div className="user-activity-switch-wrapper content-row">
-                <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler} second={true}/>
-              </div>
-              {getRelComponent(currentRelContent)}
+        <div className="main-space-wrapper">
+          <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler} second={false}/>
+          <div className="main-space">
+            <div className="user-activity-switch-wrapper content-row">
+              <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler} second={true}/>
             </div>
+            {getRelComponent(currentRelContent)}
           </div>
-          <ModalWrapper show={unpassDialogShow}>
-            <Dialog
-              title="不通过原因"
-              cancelHandler={unpassOpeCancelHandler}
-              confirmHandler={unpassOpeConfirmHandler}
-            >
+        </div>
+        <ModalWrapper show={unpassDialogShow}>
+          <Dialog
+            title="不通过原因"
+            cancelHandler={unpassOpeCancelHandler}
+            confirmHandler={unpassOpeConfirmHandler}
+          >
             <textarea
               name=""
               id=""
@@ -126,8 +122,8 @@ class Application extends React.Component<Props> {
               value={authUnPassReason}
               onChange={handleReasonChange}
             />
-            </Dialog>
-          </ModalWrapper>
+          </Dialog>
+        </ModalWrapper>
       </div>
     );
   }
@@ -142,13 +138,10 @@ export default connect(
     secondLevelTabs: getVisibleTabs(state, 2),
     activities: state.activityLogic.activities,
     superActivities: state.appLogic.superModeData.activityList,
-    users: getVisibleUsers(state, state.userLogic.users),
-    superUsers: state.appLogic.superModeData.userList,
   }),
   {
     authUnpassReasonChange: userAuthUnpassReasonChange,
     unpassOpeCancelHandler: userAuthUnpassOpeCancel,
-    unpassOpeConfirmHandler: userAuthUnpassConfirm,
     toggleTabHandler: toggleTab,
   }
 )(Application);

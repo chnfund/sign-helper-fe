@@ -41,21 +41,22 @@ export type UserLogicState = {
 export type SecurityLogicState = {
   loginPhoneNumber: string;
   loginCaptcha: string;
-  token: string;
 };
 
 export type User = {
   id: number;
-  name: string;
-  phoneNumber: number;
+  fullName: string;
+  mobile: number;
+  businessCard: null;
   companyType: number;
-  companyName: string;
+  authenticateState: number;
+  companyTypeName: string;
   companySubTypeName: string;
-  role: string;
-  activitySignCount: number;
-  authState: number;
-  isIR: number;
-  authFailReason: string;
+  companyName: string;
+  signinCount: number;
+  userCategory: number;
+  authenticateDenyReason: string;
+  position: string;
 };
 
 export type ActivityLogicState = {
