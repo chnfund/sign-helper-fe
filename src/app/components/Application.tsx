@@ -6,8 +6,8 @@ import ModalWrapper from '@src/app/components/ModalWrapper';
 import TabNav from '@src/app/components/TabNav';
 
 import {
-  getVisibleTabs,
-  toggleTab
+  checkPath,
+  getVisibleTabs, navPath,
 } from '@src/app/reducers/tab';
 import {
   unpassOpeConfirm,
@@ -27,6 +27,7 @@ type Props = {
   unpassOpeCancelHandler: () => any;
   unpassOpeConfirmHandler: () => any;
   toggleTabHandler: () => any;
+  checkPathHandler: () => any;
 };
 
 class Application extends React.Component<Props> {
@@ -45,6 +46,7 @@ class Application extends React.Component<Props> {
       unpassOpeCancelHandler,
       unpassOpeConfirmHandler,
       toggleTabHandler,
+      checkPathHandler,
     } = this.props;
 
     const handleReasonChange = (evt) => {
@@ -63,10 +65,20 @@ class Application extends React.Component<Props> {
           <div className="App-logo float-left">🐯</div>
         </header>
         <div className="main-space-wrapper">
-          <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler} second={false}/>
+          <TabNav
+            tabs={firstLevelTabs}
+            toggleTabHandler={toggleTabHandler}
+            second={false}
+            checkPathHandler={checkPathHandler}
+          />
           <div className="main-space">
             <div className="user-activity-switch-wrapper content-row">
-              <TabNav tabs={secondLevelTabs} toggleTabHandler={toggleTabHandler} second={true}/>
+              <TabNav
+                tabs={secondLevelTabs}
+                toggleTabHandler={toggleTabHandler}
+                second={true}
+                checkPathHandler={checkPathHandler}
+              />
             </div>
             {this.props.children}
           </div>
@@ -104,6 +116,7 @@ export default connect(
     authUnpassReasonChange: userAuthUnpassReasonChange,
     unpassOpeCancelHandler: userAuthUnpassOpeCancel,
     unpassOpeConfirmHandler: unpassOpeConfirm,
-    toggleTabHandler: toggleTab,
+    toggleTabHandler: navPath,
+    checkPathHandler: checkPath,
   }
 )(Application);

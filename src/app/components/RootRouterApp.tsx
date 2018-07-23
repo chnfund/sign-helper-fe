@@ -3,7 +3,7 @@ import * as React from 'react';
 import {ConnectedRouter} from 'connected-react-router';
 import {History} from 'history';
 import {connect} from 'react-redux';
-import {Route, Switch} from 'react-router';
+import {Redirect, Route, Switch} from 'react-router';
 
 import {USER_AUTH_STATE} from '@src/app/commons/const';
 import Application from '@src/app/components/Application';
@@ -27,6 +27,10 @@ class RootRouterApp extends React.Component<Props> {
       <ConnectedRouter history={this.props.history}>
         <Root>
           <Switch>
+            <Redirect exact={true} from="/" to="/application"/>
+            <Redirect exact={true} from="/application" to="/application/auth-wait/users"/>
+            <Redirect exact={true} from="/application/auth-wait" to="/application/auth-wait/users"/>
+            <Redirect exact={true} from="/application/auth-finish" to="/application/auth-finish/pass"/>
             <Route path="/auth" component={Login}/>
             <Route
               path="/application"

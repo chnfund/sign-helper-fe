@@ -1,4 +1,5 @@
-import {AppState, TabLogicState} from '@src/types/application';
+import {AppState, TabItem, TabLogicState} from '@src/types/application';
+import {push} from 'connected-react-router';
 
 const initState = {
   currentRelContent: null,
@@ -8,32 +9,49 @@ const initState = {
     title: '待审核',
     isActive: true,
     parentId: null,
+    navPath: '/application/auth-wait',
   }, {
     id: 1,
     title: '已审核',
     isActive: false,
     parentId: null,
+    navPath: '/application/auth-finish',
   }, {
     id: 2,
     title: '待审核用户',
     isActive: true,
     parentId: 0,
+    navPath: '/application/auth-wait/users',
   }, {
     id: 3,
     title: '活动列表',
     isActive: false,
     parentId: 0,
+    navPath: '/application/auth-wait/activities',
   }, {
     id: 4,
     title: '通过',
     isActive: true,
     parentId: 1,
+    navPath: '/application/auth-finish/pass',
   }, {
     id: 5,
     title: '不通过',
     isActive: false,
     parentId: 1,
+    navPath: '/application/auth-finish/deny',
   }],
+};
+
+const REACT_ROUTER_PUSH_ACTION = '@@router/LOCATION_CHANGE';
+const TAB_NAV_CHECK_PATH = 'TAB_NAV_CHECK_PATH';
+
+export const checkPath = (path) => ({type: TAB_NAV_CHECK_PATH, payload: path});
+
+export const navPath = (tab: TabItem) => {
+  return (dispatch) => {
+    dispatch(push(tab.navPath));
+  };
 };
 
 export const getVisibleTabs = (state: AppState, tabLevel: number) => {
@@ -51,23 +69,30 @@ export const getVisibleTabs = (state: AppState, tabLevel: number) => {
   return [];
 };
 
-const TOGGLE_TAB = 'TOGGLE_TAB';
-
-export const toggleTab = (tab) => ({type: TOGGLE_TAB, payload: tab});
-
 export default (state: TabLogicState = initState, action) => {
   switch (action.type) {
-    case TOGGLE_TAB:
+    case REACT_ROUTER_PUSH_ACTION:
       return {
         ...state,
         tabs: state.tabs.map(
           t => {
-            if (t.id === action.payload.id && action.payload.isActive === false) {
-              return {...action.payload, isActive: true};
-            } else if (t.parentId === action.payload.parentId) {
-              return {...t, isActive: false};
+            if (action.payload.location.pathname.includes(t.navPath)) {
+              return {...t, isActive: true};
             } else {
-              return t;
+              return {...t, isActive: false};
+            }
+          }
+        ),
+      };
+    case TAB_NAV_CHECK_PATH:
+      return {
+        ...state,
+        tabs: state.tabs.map(
+          t => {
+            if (action.payload.includes(t.navPath)) {
+              return {...t, isActive: true};
+            } else {
+              return {...t, isActive: false};
             }
           }
         ),

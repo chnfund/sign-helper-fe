@@ -6,9 +6,13 @@ type Props = {
   tabs: TabItem[];
   toggleTabHandler: any;
   second: boolean;
+  checkPathHandler: any;
 };
 
 class TabNav extends React.Component<Props> {
+  componentDidMount() {
+    this.props.checkPathHandler(window.location.href);
+  }
 
   render() {
 
