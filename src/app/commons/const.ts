@@ -29,3 +29,11 @@ export const USER_CATEGORY = {
     NONE_IR: 2,
   },
 };
+
+// 用户认证状态
+export const USER_AUTH_STATE = {
+  // 待审核
+  NONE: 0,
+  PASS: 1,
+  DENY: 2,
+};

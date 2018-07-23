@@ -9,8 +9,8 @@ import UserAuthList from '@src/app/components/UserAuthList';
 
 import {
   getRelContentPayload, SUPER_ACTIVITY_LIST, SUPER_ACTIVITY_USER_LIST,
-  TAB_ACTIVITY_LIST, TAB_AUTH_FAIL,
-  TAB_AUTH_SUCCESS,
+  TAB_ACTIVITY_LIST, TAB_AUTH_DENY,
+  TAB_AUTH_PASS,
   TAB_USER_LIST_WAIT_FOR_AUTH
 } from '@src/app/reducers/app';
 import {
@@ -75,9 +75,9 @@ class Application extends React.Component<Props> {
           return <UserAuthList users={users}/>;
         case TAB_ACTIVITY_LIST:
           return <ActivityList activities={activities}/>;
-        case TAB_AUTH_SUCCESS:
+        case TAB_AUTH_PASS:
           return <UserAuthList users={users}/>;
-        case TAB_AUTH_FAIL:
+        case TAB_AUTH_DENY:
           return <UserAuthList users={users}/>;
         case SUPER_ACTIVITY_LIST:
           return <div><ActivityList activities={superActivities}/></div>;

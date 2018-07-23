@@ -25,7 +25,7 @@ class RootRouterApp extends React.Component<Props> {
       <ConnectedRouter history={this.props.history}>
         <Root>
           <Switch>
-            <Route exact={true} path="/auth" component={Login}/>
+            <Route path="/auth" component={Login}/>
             <Route path="/application" component={Application}/>
           </Switch>
         </Root>

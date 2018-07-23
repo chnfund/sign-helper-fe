@@ -3,8 +3,8 @@ import {AppLogicState, AppState} from '@src/types/application';
 
 export const TAB_WAIT_FOR_AUTH = 'TAB_WAIT_FOR_AUTH';
 export const TAB_AUTH_COMPLETED = 'TAB_AUTH_COMPLETED';
-export const TAB_AUTH_SUCCESS = 'TAB_AUTH_SUCCESS';
-export const TAB_AUTH_FAIL = 'TAB_AUTH_FAIL';
+export const TAB_AUTH_PASS = 'TAB_AUTH_PASS';
+export const TAB_AUTH_DENY = 'TAB_AUTH_DENY';
 export const TAB_USER_LIST_WAIT_FOR_AUTH = 'TAB_USER_LIST_WAIT_FOR_AUTH';
 export const TAB_ACTIVITY_LIST = 'TAB_ACTIVITY_LIST';
 

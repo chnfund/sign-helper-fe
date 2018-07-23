@@ -1,11 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {COMPANY_TYPE} from '@src/app/commons/const';
+import {COMPANY_TYPE, USER_AUTH_STATE} from '@src/app/commons/const';
 import {showSignedActivity} from '@src/app/reducers/app';
 import {AppState, User} from '@src/types/application';
 import {
-  AUTH_FAIL, AUTH_SUCCESS,
   authPass,
   fetchUsers,
   setIRAndAuthPass,
@@ -38,7 +37,7 @@ class UserAuthList extends React.Component<Props> {
     const genUserOpBtns = (user: User) => {
 
       const authFailBtn = (tmpUser: User) => {
-        return (tmpUser.authState !== AUTH_FAIL ? (
+        return (tmpUser.authState !== USER_AUTH_STATE.DENY ? (
           <button
             className="operate-btn btn-warn"
             onClick={() => showAuthUnpassDialogHandler(tmpUser.id)}
@@ -51,8 +50,8 @@ class UserAuthList extends React.Component<Props> {
         if (tmpUser.companyType === COMPANY_TYPE.Insti) {
           return (
             <button
-              className={'operate-btn' + (tmpUser.authState !== AUTH_SUCCESS ? ' btn-info' : '')}
-              disabled={tmpUser.authState === AUTH_SUCCESS}
+              className={'operate-btn' + (tmpUser.authState !== USER_AUTH_STATE.PASS ? ' btn-info' : '')}
+              disabled={tmpUser.authState === USER_AUTH_STATE.PASS}
               onClick={() => authPassHandler(tmpUser.id)}
             >
               通过
@@ -62,15 +61,15 @@ class UserAuthList extends React.Component<Props> {
           return (
             <div>
               <button
-                className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR === 1 && tmpUser.authState === AUTH_SUCCESS}
+                className={'operate-btn' + (tmpUser.isIR === 1 && tmpUser.authState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                disabled={tmpUser.isIR === 1 && tmpUser.authState === USER_AUTH_STATE.PASS}
                 onClick={() => setIRAndAuthPassHandler(tmpUser.id, true)}
               >
                 IR
               </button>
               <button
-                className={'operate-btn' + (tmpUser.isIR !== 1 && tmpUser.authState === AUTH_SUCCESS ? '' : ' btn-info')}
-                disabled={tmpUser.isIR !== 1 && tmpUser.authState === AUTH_SUCCESS}
+                className={'operate-btn' + (tmpUser.isIR !== 1 && tmpUser.authState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                disabled={tmpUser.isIR !== 1 && tmpUser.authState === USER_AUTH_STATE.PASS}
                 onClick={() => setIRAndAuthPassHandler(tmpUser.id, false)}
               >
                 非IR

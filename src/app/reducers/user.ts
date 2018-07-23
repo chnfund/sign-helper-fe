@@ -1,17 +1,13 @@
-import {USER_CATEGORY} from '@src/app/commons/const';
+import {USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {AppState, User, UserLogicState} from '@src/types/application';
 
 import {
   getRelContentPayload,
-  TAB_AUTH_FAIL,
-  TAB_AUTH_SUCCESS,
+  TAB_AUTH_DENY,
+  TAB_AUTH_PASS,
   TAB_USER_LIST_WAIT_FOR_AUTH
 } from '@src/app/reducers/app';
-
-export const AUTH_WAIT = 2;
-export const AUTH_SUCCESS = 1;
-export const AUTH_FAIL = 0;
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -73,11 +69,11 @@ export const getVisibleUsers = (state: AppState, users: User[]) => {
 
   switch (relContent) {
     case TAB_USER_LIST_WAIT_FOR_AUTH:
-      return users.filter(u => u.authState === AUTH_WAIT);
-    case TAB_AUTH_FAIL:
-      return users.filter(u => u.authState === AUTH_FAIL);
-    case TAB_AUTH_SUCCESS:
-      return users.filter(u => u.authState === AUTH_SUCCESS);
+      return users.filter(u => u.authState === USER_AUTH_STATE.NONE);
+    case TAB_AUTH_DENY:
+      return users.filter(u => u.authState === USER_AUTH_STATE.DENY);
+    case TAB_AUTH_PASS:
+      return users.filter(u => u.authState === USER_AUTH_STATE.PASS);
     default:
       return users;
   }

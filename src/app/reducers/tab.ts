@@ -1,6 +1,6 @@
 import {
   TAB_ACTIVITY_LIST,
-  TAB_AUTH_COMPLETED, TAB_AUTH_FAIL, TAB_AUTH_SUCCESS,
+  TAB_AUTH_COMPLETED, TAB_AUTH_DENY, TAB_AUTH_PASS,
   TAB_USER_LIST_WAIT_FOR_AUTH,
   TAB_WAIT_FOR_AUTH
 } from '@src/app/reducers/app';
@@ -38,13 +38,13 @@ const initState = {
     title: '通过',
     isActive: true,
     parentId: 1,
-    relContent: TAB_AUTH_SUCCESS,
+    relContent: TAB_AUTH_PASS,
   }, {
     id: 5,
     title: '不通过',
     isActive: false,
     parentId: 1,
-    relContent: TAB_AUTH_FAIL,
+    relContent: TAB_AUTH_DENY,
   }],
 };
 
