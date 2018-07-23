@@ -1,6 +1,6 @@
+import {USER_AUTH_STATE} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {User, UserLogicState} from '@src/types/application';
-import {USER_AUTH_STATE} from '@src/app/commons/const';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';

@@ -5,11 +5,11 @@ const LOAD_MEETING = 'LOAD_MEETING';
 
 const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
 
-export const fetchActivity = () => {
+export const fetchActivity = (pageIndex) => {
   return (dispatch) => {
-    getActivities()
+    getActivities(pageIndex)
       .then(
-        (meetings) => dispatch(loadMeeting(meetings))
+        (res) => dispatch(loadMeeting(res.data))
       );
   };
 };

@@ -66,10 +66,11 @@ export type ActivityLogicState = {
 export type Activity = {
   id: number;
   title: string;
-  publisher: string;
-  publisherRole: string;
-  activityStartDate: string;
-  signCount: number;
+  fullName: string;
+  position: string;
+  showTime: string;
+  signinNumber: number;
+  company: string;
 };
 
 export type AuthUnpassInfo = {

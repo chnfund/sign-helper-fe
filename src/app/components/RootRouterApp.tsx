@@ -11,6 +11,7 @@ import Login from '@src/app/components/Login';
 import Root from '@src/app/components/Root';
 import UserAuthList from '@src/app/components/UserAuthList';
 import {verifyToken} from '@src/app/reducers/security';
+import ActivityList from '@src/app/components/ActivityList';
 
 type Props = {
   history: History;
@@ -45,7 +46,7 @@ class RootRouterApp extends React.Component<Props> {
                   <Route
                     path="/application/auth-wait/activities"
                     component={() => (
-                      <UserAuthList authState={USER_AUTH_STATE.NONE}/>
+                      <ActivityList />
                     )}
                   />
                   <Route
