@@ -1,9 +1,13 @@
+import {RouterState} from 'connected-react-router';
+
 export type AppState = {
   message: string;
   tabLogic: TabLogicState;
   userLogic: UserLogicState;
   activityLogic: ActivityLogicState;
   appLogic: AppLogicState;
+  securityLogic: SecurityLogicState;
+  router: RouterState;
 };
 
 export type AppLogicState = {
@@ -30,13 +34,14 @@ export type TabItem = {
 };
 
 export type UserLogicState = {
-  login: {
-    loginPhoneNumber: string;
-    loginCaptcha: string;
-    token: string;
-  };
   users: User[];
   authUnpassInfo: AuthUnpassInfo;
+};
+
+export type SecurityLogicState = {
+  loginPhoneNumber: string;
+  loginCaptcha: string;
+  token: string;
 };
 
 export type User = {

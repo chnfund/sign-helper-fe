@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
+import {createBrowserHistory} from 'history';
 import {Provider} from 'react-redux';
 
-import RootApp from '@src/app/components/RootApp';
+import RootRouterApp from '@src/app/components/RootRouterApp';
 import store from '@src/store';
 
 import mainStyle from '@src/resource/css/main.css';
@@ -16,9 +17,11 @@ ${normalizeStyle}
 ${mainStyle}
 `);
 
+const history = createBrowserHistory();
+
 ReactDom.render(
-    <Provider store={store}>
-        <RootApp/>
-    </Provider>,
-    document.getElementById('root') as HTMLElement
+  <Provider store={store(history)}>
+    <RootRouterApp history={history}/>
+  </Provider>,
+  document.getElementById('root') as HTMLElement
 );

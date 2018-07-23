@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {BrowserRouter as Router} from 'react-router-dom';
 
 import ActivityList from '@src/app/components/ActivityList';
 import Dialog from '@src/app/components/Dialog';
@@ -9,7 +8,7 @@ import TabNav from '@src/app/components/TabNav';
 import UserAuthList from '@src/app/components/UserAuthList';
 
 import {
-  getRelContentPayload,
+  getRelContentPayload, SUPER_ACTIVITY_LIST, SUPER_ACTIVITY_USER_LIST,
   TAB_ACTIVITY_LIST, TAB_AUTH_FAIL,
   TAB_AUTH_SUCCESS,
   TAB_USER_LIST_WAIT_FOR_AUTH
@@ -19,36 +18,30 @@ import {
   toggleTab
 } from '@src/app/reducers/tab';
 import {
-  getCaptcha,
-  loginCaptchaC,
-  loginPhoneNC, loginSubmit,
+  getVisibleUsers,
   userAuthUnpassConfirm,
   userAuthUnpassOpeCancel,
   userAuthUnpassReasonChange
 } from '@src/app/reducers/user';
-import {AppState, TabItem} from '@src/types/application';
+import {Activity, AppState, TabItem, User} from '@src/types/application';
 
 type Props = {
   currentRelContent: string;
   authUnPassReason: string;
   unpassDialogShow: boolean;
-  appLoginNeeded: boolean;
   firstLevelTabs: TabItem[];
   secondLevelTabs: TabItem[];
+  activities: Activity[];
+  superActivities: Activity[];
+  users: User[];
+  superUsers: User[];
   authUnpassReasonChange: any;
   unpassOpeCancelHandler: () => any;
   unpassOpeConfirmHandler: () => any;
   toggleTabHandler: () => any;
-  loginPhoneNumber: string;
-  loginCaptcha: string;
-  loginPhoneNCHandler: any;
-  loginCaptchaCHandler: any;
-  getCaptchaHandler: any;
-  loginSubmitHandler: any;
 };
 
-class RootApp extends React.Component<Props> {
-
+class Application extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
@@ -58,20 +51,17 @@ class RootApp extends React.Component<Props> {
     const {
       authUnPassReason,
       unpassDialogShow,
-      appLoginNeeded,
       firstLevelTabs,
       secondLevelTabs,
+      activities,
+      superActivities,
+      users,
+      superUsers,
       authUnpassReasonChange,
       unpassOpeCancelHandler,
       unpassOpeConfirmHandler,
       toggleTabHandler,
       currentRelContent,
-      loginPhoneNumber,
-      loginCaptcha,
-      loginPhoneNCHandler,
-      loginCaptchaCHandler,
-      getCaptchaHandler,
-      loginSubmitHandler,
     } = this.props;
 
     const handleReasonChange = (evt) => {
@@ -79,28 +69,27 @@ class RootApp extends React.Component<Props> {
       authUnpassReasonChange(val);
     };
 
-    const handleLoginPhoneNumberChange = (evt) => {
-      const val = evt.target.value;
-      loginPhoneNCHandler(val);
-    };
-
-    const handleLoginCaptchaChange = (evt) => {
-      const val = evt.target.value;
-      loginCaptchaCHandler(val);
-    };
-
     const getRelComponent = (relContent) => {
       switch (relContent) {
         case TAB_USER_LIST_WAIT_FOR_AUTH:
-          return <UserAuthList/>;
+          return <UserAuthList users={users}/>;
         case TAB_ACTIVITY_LIST:
-          return <ActivityList/>;
+          return <ActivityList activities={activities}/>;
         case TAB_AUTH_SUCCESS:
-          return <UserAuthList/>;
+          return <UserAuthList users={users}/>;
         case TAB_AUTH_FAIL:
-          return <UserAuthList/>;
+          return <UserAuthList users={users}/>;
+        case SUPER_ACTIVITY_LIST:
+          return <div><ActivityList activities={superActivities}/></div>;
+        case SUPER_ACTIVITY_USER_LIST:
+          return (
+            <div>
+              <ActivityList activities={superActivities}/>
+              <UserAuthList users={superUsers}/>
+            </div>
+          );
         default:
-          return <UserAuthList/>;
+          return <UserAuthList users={users}/>;
       }
     };
 
@@ -114,7 +103,6 @@ class RootApp extends React.Component<Props> {
           <div className="App-logo float-left">🐯</div>
           <div className="App-logo float-left">🐯</div>
         </header>
-        <Router>
           <div className="main-space-wrapper">
             <TabNav tabs={firstLevelTabs} toggleTabHandler={toggleTabHandler} second={false}/>
             <div className="main-space">
@@ -124,13 +112,12 @@ class RootApp extends React.Component<Props> {
               {getRelComponent(currentRelContent)}
             </div>
           </div>
-        </Router>
-        <ModalWrapper show={unpassDialogShow}>
-          <Dialog
-            title="不通过原因"
-            cancelHandler={unpassOpeCancelHandler}
-            confirmHandler={unpassOpeConfirmHandler}
-          >
+          <ModalWrapper show={unpassDialogShow}>
+            <Dialog
+              title="不通过原因"
+              cancelHandler={unpassOpeCancelHandler}
+              confirmHandler={unpassOpeConfirmHandler}
+            >
             <textarea
               name=""
               id=""
@@ -139,16 +126,8 @@ class RootApp extends React.Component<Props> {
               value={authUnPassReason}
               onChange={handleReasonChange}
             />
-          </Dialog>
-        </ModalWrapper>
-        <ModalWrapper show={appLoginNeeded}>
-          <label>手机号</label>
-          <input type="text" value={loginPhoneNumber} onChange={handleLoginPhoneNumberChange}/>
-          <label>验证码</label>
-          <input type="text" value={loginCaptcha} onChange={handleLoginCaptchaChange}/>
-          <button onClick={getCaptchaHandler}>获取验证码</button>
-          <button className="operate-btn btn-info" onClick={loginSubmitHandler}>登陆</button>
-        </ModalWrapper>
+            </Dialog>
+          </ModalWrapper>
       </div>
     );
   }
@@ -156,23 +135,20 @@ class RootApp extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
+    currentRelContent: getRelContentPayload(state),
     authUnPassReason: state.userLogic.authUnpassInfo.authUnPassReason,
     unpassDialogShow: state.userLogic.authUnpassInfo.unpassDialogShow,
-    appLoginNeeded: state.userLogic.login.token == null,
     firstLevelTabs: getVisibleTabs(state, 1),
     secondLevelTabs: getVisibleTabs(state, 2),
-    currentRelContent: getRelContentPayload(state),
-    loginPhoneNumber: state.userLogic.login.loginPhoneNumber,
-    loginCaptcha: state.userLogic.login.loginCaptcha,
+    activities: state.activityLogic.activities,
+    superActivities: state.appLogic.superModeData.activityList,
+    users: getVisibleUsers(state, state.userLogic.users),
+    superUsers: state.appLogic.superModeData.userList,
   }),
   {
     authUnpassReasonChange: userAuthUnpassReasonChange,
     unpassOpeCancelHandler: userAuthUnpassOpeCancel,
     unpassOpeConfirmHandler: userAuthUnpassConfirm,
     toggleTabHandler: toggleTab,
-    loginPhoneNCHandler: loginPhoneNC,
-    loginCaptchaCHandler: loginCaptchaC,
-    getCaptchaHandler: getCaptcha,
-    loginSubmitHandler: loginSubmit,
   }
-)(RootApp);
+)(Application);

@@ -8,7 +8,7 @@ import {
   AUTH_FAIL, AUTH_SUCCESS,
   authPass,
   fetchUsers,
-  getVisibleUsers, setIRAndAuthPass,
+  setIRAndAuthPass,
   showAuthUnpassDialog
 } from '../reducers/user';
 
@@ -134,7 +134,6 @@ export default connect(
   (
     state: AppState
   ) => ({
-    users: getVisibleUsers(state, state.userLogic.users),
   }),
   {
     fetchUserHandler: fetchUsers,

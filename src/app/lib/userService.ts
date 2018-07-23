@@ -1,4 +1,5 @@
 import {HOST} from '@src/app/commons/config';
+import {SYS_CODE} from '@src/app/commons/const';
 
 export const requestCaptcha = (loginPhoneNumber: string) => {
   return fetch(`${HOST}/sms/send-captcha`, {
@@ -28,9 +29,11 @@ export const loginSubmit = (loginPhoneNumber, loginCaptcha) => {
   }).then(res => res.json());
 };
 
-export const getUsers = () => {
-  return fetch(`${HOST}/user`)
-    .then(res => res.json());
+export const getUsers = (dispatch) => {
+  return fetch(`${HOST}/admin/user/list-auth-user`)
+    .then(res => res.json().then(result => {
+      processResult(result, dispatch);
+    }));
 };
 
 export const updateUser = (user) => {
@@ -42,4 +45,18 @@ export const updateUser = (user) => {
     },
     body: JSON.stringify(user),
   }).then(res => res.json());
+};
+
+const processResult = (result, dispatch) => {
+  if (result.success) {
+    return result.data;
+  } else {
+    processError(result, dispatch);
+  }
+};
+
+const processError = (result, dispatch) => {
+  if (result.data === SYS_CODE.NOT_LOGIN) {
+    console.log(result.data);
+  }
 };

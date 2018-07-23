@@ -41,7 +41,10 @@ export const getRelContentPayload = (state: AppState) => {
 
 export default (
   state: AppLogicState = {
-    superModeData: null,
+    superModeData: {
+      userList: [],
+      activityList: [],
+    },
     isSuperModeActive: false,
     superModeContent: '',
   },
