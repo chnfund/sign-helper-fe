@@ -2,11 +2,10 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
-import {showSignedActivity} from '@src/app/reducers/app';
 import {AppState, User} from '@src/types/application';
 import {
   authUser,
-  fetchUsers,
+  fetchUsers, filterUserBuyAuthState,
   showAuthUnpassDialog
 } from '../reducers/user';
 
@@ -20,6 +19,10 @@ type Props = {
 };
 
 class UserAuthList extends React.Component<Props> {
+  static defaultProps = {
+    users: [],
+  };
+
   componentDidMount() {
     this.props.fetchUserHandler(this.props.authState, 1);
   }
@@ -130,17 +133,16 @@ class UserAuthList extends React.Component<Props> {
   }
 }
 
-export default connect(
-  (
-    state: AppState
+export default connect((
+    state: AppState,
+    props: any
   ) => ({
-    users: state.userLogic.users,
+    users: filterUserBuyAuthState(state.userLogic.users, props.authState),
   }),
   {
     fetchUserHandler: fetchUsers,
     authUserHandler: authUser,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
-    showSignedActivityHandler: showSignedActivity,
   }
 )
 (UserAuthList);

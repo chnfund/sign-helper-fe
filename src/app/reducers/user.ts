@@ -1,5 +1,6 @@
 import * as userApi from '@src/app/lib/userService';
 import {User, UserLogicState} from '@src/types/application';
+import {USER_AUTH_STATE} from '@src/app/commons/const';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -40,6 +41,30 @@ export const authUser = (id, authState, userCategory) => {
     )
       .then(res => dispatch(replaceUser(tmpUser)));
   };
+};
+
+export const unpassOpeConfirm = () => {
+  return (dispatch, getState) => {
+    const {users, authUnpassInfo} = getState().userLogic;
+    const user: User = users.find(t => t.id === authUnpassInfo.userId);
+    const tmpUser: User = {
+      ...user,
+      authenticateState: USER_AUTH_STATE.DENY,
+      userCategory: null,
+      authenticateDenyReason: authUnpassInfo.authUnPassReason,
+    };
+    userApi.authUserFetch(
+      tmpUser.id,
+      tmpUser.authenticateState,
+      tmpUser.userCategory,
+      tmpUser.authenticateDenyReason
+    )
+      .then(res => dispatch(replaceUser(tmpUser)));
+  };
+};
+
+export const filterUserBuyAuthState = (users: User[], authState: number) => {
+  return users.filter(u => u.authenticateState === authState);
 };
 
 export default (

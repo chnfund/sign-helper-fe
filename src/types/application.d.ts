@@ -30,7 +30,6 @@ export type TabItem = {
   title: string;
   isActive: boolean;
   parentId: number;
-  relContent: string;
 };
 
 export type UserLogicState = {

@@ -48,9 +48,7 @@ export const verifyToken = () => {
   return (dispatch) => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (token === null) {
-      dispatch(push('auth'));
-    } else {
-      dispatch(push('application'));
+      dispatch(push('/auth'));
     }
   };
 };
