@@ -7,6 +7,9 @@ import activityReducer from '@src/app/reducers/activity';
 import securityReducer from '@src/app/reducers/security';
 import tabReducer from '@src/app/reducers/tab';
 import userReducer from '@src/app/reducers/user';
+import { loadState } from '@src/localStorage';
+
+const persistedState = loadState();
 
 const reducer = combineReducers({
   tabLogic: tabReducer,
@@ -17,6 +20,7 @@ const reducer = combineReducers({
 
 export default (history) => createStore(
   connectRouter(history)(reducer),
+  persistedState,
   composeWithDevTools(
     applyMiddleware(
       thunk,

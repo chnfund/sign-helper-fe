@@ -352,6 +352,11 @@ html body {
   margin: 40px 0 0 30px;
 }
 
+.activity-detail-header-content {
+  margin: 22px 0 0 0;
+  height: 75px;
+}
+
 .company-card-img-holder {
   width: 158px;
   height: 76px;
@@ -426,6 +431,12 @@ html body {
   font-size: 15px;
   margin: 5px 30px;
   line-height: 50px;
+}
+
+.activity-text-row-thin {
+  font-size: 15px;
+  margin: 5px 30px;
+  line-height: 30px;
 }
 
 .normal-list-pagination {

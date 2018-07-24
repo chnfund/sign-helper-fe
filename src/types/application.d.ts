@@ -78,6 +78,7 @@ export type Activity = {
   showTime: string;
   signinNumber: number;
   company: string;
+  createUser: User;
 };
 
 export type AuthUnpassInfo = {

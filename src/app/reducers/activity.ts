@@ -117,6 +117,11 @@ export default (
           ? state.focusUser
           : null,
       };
+    case FETCH_ACTIVITY_DETAIL:
+      return {
+        ...state,
+        focusActivity: action.payload,
+      };
     default:
       return state;
   }

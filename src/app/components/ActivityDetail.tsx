@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import {USER_AUTH_STATE} from '@src/app/commons/const';
 import UserAuthList from '@src/app/components/UserAuthList';
 import {focusActivity} from '@src/app/reducers/activity';
 import {Activity, AppState} from '@src/types/application';
@@ -20,7 +21,7 @@ class ActivityDetail extends React.Component<Props> {
   }
 
   componentDidMount() {
-    this.props.focusActivityHandler(this.props.match.params.userId);
+    this.props.focusActivityHandler(this.props.match.params.activityId);
   }
 
   goBack() {
@@ -33,22 +34,24 @@ class ActivityDetail extends React.Component<Props> {
       <div>
         {activity !== null ?
           <div>
-            <a className="nav-back-link" onClick={this.goBack}>&lt;返回用户列表</a>
-            <div className="table-row content-row">
-              <div className="table-row-part flex-d-row">
-                <div className="float-left">
-                  <div className="flex-1 activity-text-row">启用报名，开启审批15324254426</div>
-                  <div className="flex-1 activity-text-row">发布人: 王维</div>
+            <div className="table-row content-row flex-d-column">
+              <a className="nav-back-link" onClick={this.goBack}>&lt;返回用户列表</a>
+              <div className="display-flex flex-d-row activity-detail-header-content">
+                <div className="table-row-part flex-d-row">
+                  <div className="float-left">
+                    <div className="flex-1 activity-text-row-thin">{activity.title}</div>
+                    <div className="flex-1 activity-text-row-thin">发布人: {activity.createUser.fullName}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="table-row-part">
-                <div className="float-right">
-                  <div className="flex-1 activity-text-row text-align-right">2018/07/24</div>
-                  <div className="flex-1 activity-text-row text-align-right">签到人数: 0</div>
+                <div className="table-row-part">
+                  <div className="float-right">
+                    <div className="flex-1 activity-text-row-thin text-align-right">{activity.showTime}</div>
+                    <div className="flex-1 activity-text-row-thin text-align-right">签到人数: {activity.signinNumber}</div>
+                  </div>
                 </div>
               </div>
             </div>
-            <UserAuthList pageable={true}/>
+            <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE}/>
           </div>
           : ''}
       </div>
@@ -58,7 +61,7 @@ class ActivityDetail extends React.Component<Props> {
 
 export default connect(
   (state: AppState, ownProps: any) => ({
-    user: state.activityLogic.focusUser,
+    activity: state.activityLogic.focusActivity,
   }),
   {
     focusActivityHandler: focusActivity,
