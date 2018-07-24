@@ -1,18 +1,20 @@
 import {USER_AUTH_STATE} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
-import {User, UserLogicState} from '@src/types/application';
+import {PageItem, User, UserLogicState} from '@src/types/application';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
 const USER_AUTH_UNPASS_REASON_CHANGE = 'USER_AUTH_UNPASS_REASON_CHANGE';
 const USER_AUTH_UNPASS_CANCEL = 'USER_AUTH_UNPASS_CANCEL';
 const SHOW_AUTH_UNPASS_DIALOG = 'SHOW_AUTH_UNPASS_DIALOG';
+const ACTIVE_USER_LIST_PAGE = 'ACTIVE_USER_LIST_PAGE';
 
 const loadUsers = (users) => ({type: LOAD_USERS, payload: users});
 const replaceUser = (user) => ({type: REPLACE_USER, payload: user});
 export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REASON_CHANGE, payload: txt});
 export const userAuthUnpassOpeCancel = () => ({type: USER_AUTH_UNPASS_CANCEL});
 export const showAuthUnpassDialog = (id) => ({type: SHOW_AUTH_UNPASS_DIALOG, payload: id});
+export const activePage = (id) => ({type: ACTIVE_USER_LIST_PAGE, payload: id});
 
 export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
@@ -63,12 +65,60 @@ export const unpassOpeConfirm = () => {
   };
 };
 
+export const userPageNav = (authState, id) => {
+  return (dispatch, getState) => {
+    const {userLogic} = getState();
+    let currentPageIndex = getCurrentPageIndex(userLogic.pages);
+    switch (id) {
+      case '-1':
+        if (currentPageIndex === 1) {
+          break;
+        }
+        currentPageIndex = currentPageIndex - 1;
+        break;
+      case '+1':
+        currentPageIndex = currentPageIndex + 1;
+        break;
+      default:
+        currentPageIndex = id;
+    }
+
+    userApi.getUsers(authState, currentPageIndex)
+      .then((res) => {
+          if (res.data.length === 0) {
+            return;
+          }
+          return dispatch(loadUsers(res.data));
+        }
+      );
+
+    // dispatch(activePage(currentPageIndex));
+  };
+};
+
+export const getCurrentPageIndex = (pages: PageItem[]) => {
+  const tmpItem = pages.find(p => p.active === true);
+  if (tmpItem) {
+    return tmpItem.id;
+  } else {
+    return 1;
+  }
+};
+
 export const filterUserBuyAuthState = (users: User[], authState: number) => {
   return users.filter(u => u.authenticateState === authState);
 };
 
 export default (
   state: UserLogicState = {
+    pages: [{
+      id: 1,
+      active: true,
+    }, {
+      id: 2,
+      active: false,
+    }],
+    pageSize: 20,
     users: [],
     authUnpassInfo: {
       userId: '',
@@ -118,6 +168,15 @@ export default (
           authUnPassReason: '',
           unpassDialogShow: false,
         },
+      };
+    case ACTIVE_USER_LIST_PAGE:
+      return {
+        ...state,
+        pages: state.pages.map(p =>
+          p.id === action.payload ?
+            {...p, active: true} :
+            {...p, active: false}
+        ),
       };
     default:
       return state;

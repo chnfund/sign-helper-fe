@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
+import {Route} from 'react-router';
 
 import Dialog from '@src/app/components/Dialog';
 import ModalWrapper from '@src/app/components/ModalWrapper';
@@ -15,6 +16,9 @@ import {
   userAuthUnpassReasonChange
 } from '@src/app/reducers/user';
 
+import {USER_AUTH_STATE} from '@src/app/commons/const';
+import ActivityList from '@src/app/components/ActivityList';
+import UserAuthList from '@src/app/components/UserAuthList';
 import {Activity, AppState, TabItem} from '@src/types/application';
 
 type Props = {
@@ -80,7 +84,43 @@ class Application extends React.Component<Props> {
                 checkPathHandler={checkPathHandler}
               />
             </div>
-            {this.props.children}
+            <Route
+              exact={true}
+              path="/application/auth-wait/users"
+              render={() => (
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE}/>
+              )}
+            />
+            <Route
+              exact={true}
+              path="/application/auth-wait/activities"
+              render={() => (
+                <ActivityList pageable={true}/>
+              )}
+            />
+            <Route
+              exact={true}
+              path="/application/auth-finish/pass"
+              render={() => (
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.PASS}/>
+              )}
+            />
+            <Route
+              exact={true}
+              path="/application/auth-finish/deny"
+              render={() => (
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.DENY}/>
+              )}
+            />
+            <Route
+              exact={true}
+              path="/application/auth-wait/users/user-sign-in-activities/:userId?"
+              render={() => (
+                <div>
+                  <ActivityList pageable={true}/>
+                </div>
+              )}
+            />
           </div>
         </div>
         <ModalWrapper show={unpassDialogShow}>

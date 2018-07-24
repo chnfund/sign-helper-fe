@@ -34,6 +34,8 @@ export type TabItem = {
 };
 
 export type UserLogicState = {
+  pages: PageItem[];
+  pageSize: number;
   users: User[];
   authUnpassInfo: AuthUnpassInfo;
 };
@@ -60,6 +62,8 @@ export type User = {
 };
 
 export type ActivityLogicState = {
+  pages: PageItem[];
+  pageSize: number;
   activities: Activity[];
 };
 
@@ -77,4 +81,9 @@ export type AuthUnpassInfo = {
   userId: string;
   authUnPassReason: string;
   unpassDialogShow: false;
+};
+
+export type PageItem = {
+  id: number;
+  active: boolean;
 };

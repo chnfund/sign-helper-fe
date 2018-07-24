@@ -2,16 +2,21 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
-import {AppState, User} from '@src/types/application';
+import Pagination from '@src/app/components/Pagination';
+import {AppState, PageItem, User} from '@src/types/application';
 import {
   authUser,
   fetchUsers, filterUserBuyAuthState,
-  showAuthUnpassDialog
+  showAuthUnpassDialog, userPageNav
 } from '../reducers/user';
 
 type Props = {
+  pageable: boolean;
   authState: number;
+  pages: PageItem[];
+  pageSize: number;
   users: User[];
+  pageNavHandler: any;
   fetchUserHandler: any;
   authUserHandler: (id: number, authState: number, userCategory: number) => any;
   showAuthUnpassDialogHandler: any;
@@ -19,9 +24,6 @@ type Props = {
 };
 
 class UserAuthList extends React.Component<Props> {
-  static defaultProps = {
-    users: [],
-  };
 
   componentDidMount() {
     this.props.fetchUserHandler(this.props.authState, 1);
@@ -29,10 +31,13 @@ class UserAuthList extends React.Component<Props> {
 
   render() {
     const {
+      pageable,
       users,
+      pages,
       authUserHandler,
       showAuthUnpassDialogHandler,
       showSignedActivityHandler,
+      pageNavHandler,
     } = this.props;
 
     const genUserOpBtns = (user: User) => {
@@ -89,6 +94,10 @@ class UserAuthList extends React.Component<Props> {
 
     };
 
+    const pageNavClickHandler = () => {
+      return (id) => pageNavHandler(this.props.authState, id);
+    };
+
     return (
       <div>
         <div className="table-header content-row">
@@ -128,21 +137,27 @@ class UserAuthList extends React.Component<Props> {
             </div>
           </div>
         ))}
+        {pageable ?
+          <Pagination className="normal-list-pagination" pages={pages} clickHandler={pageNavClickHandler()}/>
+          : ''
+        }
       </div>
     );
   }
 }
 
 export default connect((
-    state: AppState,
-    props: any
+  state: AppState,
+  props: any
   ) => ({
+    pages: state.userLogic.pages,
     users: filterUserBuyAuthState(state.userLogic.users, props.authState),
   }),
   {
     fetchUserHandler: fetchUsers,
     authUserHandler: authUser,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
+    pageNavHandler: userPageNav,
   }
 )
 (UserAuthList);

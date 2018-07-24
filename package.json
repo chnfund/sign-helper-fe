@@ -29,7 +29,6 @@
     "testRegex": "(/src/|/__tests__/).*\\.(spec|test)\\.(ts|tsx|js)$"
   },
   "dependencies": {
-    "antd": "^3.7.0",
     "classnames": "^2.2.5",
     "connected-react-router": "^4.3.0",
     "normalizr": "^3.2.4",

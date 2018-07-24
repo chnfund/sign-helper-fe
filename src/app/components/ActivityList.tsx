@@ -1,12 +1,15 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {fetchActivity} from '@src/app/reducers/activity';
+import Pagination from '@src/app/components/Pagination';
+import {fetchActivity, pageNav} from '@src/app/reducers/activity';
 import {Activity, AppState} from '@src/types/application';
 
 type Props = {
+  pageable: boolean;
   activities: Activity[];
   fetchActivityHandler: (pageIndex: number) => any;
+  pageNavHandler: any;
 };
 
 class ActivityList extends React.Component<Props> {
@@ -16,7 +19,7 @@ class ActivityList extends React.Component<Props> {
   }
 
   render() {
-    const {activities} = this.props;
+    const {pageable, activities, pageNavHandler} = this.props;
 
     return (
       <div>
@@ -44,6 +47,10 @@ class ActivityList extends React.Component<Props> {
             </div>
           </div>
         ))}
+        {pageable ?
+          <Pagination className="normal-list-pagination" pages={[]} clickHandler={pageNavHandler}/>
+          : ''
+        }
       </div>
     );
   }
@@ -55,5 +62,6 @@ export default connect(
   }),
   {
     fetchActivityHandler: fetchActivity,
+    pageNavHandler: pageNav,
   }
 )(ActivityList);
