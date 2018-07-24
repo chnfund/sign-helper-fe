@@ -334,6 +334,24 @@ html body {
   flex: 1;
 }
 
+.user-sign-in-activities-header {
+  height: 90px;
+}
+
+.nav-back-link {
+  color: #2593FB;
+  font-size: 14px;
+  float: left;
+  display: block;
+  margin: 10px 0 0 30px;
+}
+
+.nav-back-username {
+  float: left;
+  color: #939393;
+  margin: 40px 0 0 30px;
+}
+
 .company-card-img-holder {
   width: 158px;
   height: 76px;

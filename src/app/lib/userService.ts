@@ -1,6 +1,20 @@
 import {HOST} from '@src/app/commons/config';
 import {convertToParams, headerWithToken} from '@src/app/util/fetchUtils';
 
+export function getUserById(userId: number) {
+  return fetch(`${HOST}/admin/user/get-user?${convertToParams({
+    id: userId,
+  })}`, {
+    method: 'GET',
+    headers: headerWithToken({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }),
+  })
+    .then(res => res.json());
+}
+
+
 export const requestCaptcha = (loginPhoneNumber: string) => {
   return fetch(`${HOST}/sms/send-captcha`, {
     method: 'POST',

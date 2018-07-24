@@ -17,8 +17,10 @@ import {
 } from '@src/app/reducers/user';
 
 import {USER_AUTH_STATE} from '@src/app/commons/const';
+import ActivityDetail from '@src/app/components/ActivityDetail';
 import ActivityList from '@src/app/components/ActivityList';
 import UserAuthList from '@src/app/components/UserAuthList';
+import UserSingInActivityList from '@src/app/components/UserSingInActivityList';
 import {Activity, AppState, TabItem} from '@src/types/application';
 
 type Props = {
@@ -115,11 +117,12 @@ class Application extends React.Component<Props> {
             <Route
               exact={true}
               path="/application/auth-wait/users/user-sign-in-activities/:userId?"
-              render={() => (
-                <div>
-                  <ActivityList pageable={true}/>
-                </div>
-              )}
+              component={UserSingInActivityList}
+            />
+            <Route
+              exact={true}
+              path="/application/auth-wait/activities/activity-detail/:activityId?"
+              component={ActivityDetail}
             />
           </div>
         </div>

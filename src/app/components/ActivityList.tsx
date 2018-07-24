@@ -2,29 +2,40 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import Pagination from '@src/app/components/Pagination';
-import {fetchActivity, pageNav} from '@src/app/reducers/activity';
+import {fetchActivity, pageNav, showActivityDetail} from '@src/app/reducers/activity';
 import {Activity, AppState} from '@src/types/application';
 
 type Props = {
+  focusUserId: number;
   pageable: boolean;
   activities: Activity[];
-  fetchActivityHandler: (pageIndex: number) => any;
+  fetchActivityHandler: (userId: number, pageIndex: number) => any;
   pageNavHandler: any;
+  showActivityDetailHandler: any;
 };
 
 class ActivityList extends React.Component<Props> {
 
   componentDidMount() {
-    this.props.fetchActivityHandler(1);
+    if (this.props.focusUserId !== null) {
+      this.props.fetchActivityHandler(this.props.focusUserId, 1);
+    } else {
+      this.props.fetchActivityHandler(null, 1);
+    }
   }
 
   render() {
-    const {pageable, activities, pageNavHandler} = this.props;
+    const {
+      pageable,
+      activities,
+      pageNavHandler,
+      showActivityDetailHandler,
+    } = this.props;
 
     return (
       <div>
         {activities.map(meeting => (
-          <div key={meeting.id} className="table-row content-row">
+          <div key={meeting.id} className="table-row content-row" onClick={() => showActivityDetailHandler(meeting.id)}>
             <div className="table-row-part flex-d-row">
               <div className="float-left">
                 <div className="flex-1 activity-text-row">
@@ -59,9 +70,11 @@ class ActivityList extends React.Component<Props> {
 export default connect(
   (state: AppState) => ({
     activities: state.activityLogic.activities,
+    focusUserId: state.activityLogic.focusUserId,
   }),
   {
     fetchActivityHandler: fetchActivity,
     pageNavHandler: pageNav,
+    showActivityDetailHandler: showActivityDetail,
   }
 )(ActivityList);

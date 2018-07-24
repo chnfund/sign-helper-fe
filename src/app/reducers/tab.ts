@@ -43,7 +43,7 @@ const initState = {
   }],
 };
 
-const REACT_ROUTER_PUSH_ACTION = '@@router/LOCATION_CHANGE';
+export const REACT_ROUTER_PUSH_ACTION = '@@router/LOCATION_CHANGE';
 const TAB_NAV_CHECK_PATH = 'TAB_NAV_CHECK_PATH';
 
 export const checkPath = (path) => ({type: TAB_NAV_CHECK_PATH, payload: path});
@@ -51,6 +51,12 @@ export const checkPath = (path) => ({type: TAB_NAV_CHECK_PATH, payload: path});
 export const navPath = (tab: TabItem) => {
   return (dispatch) => {
     dispatch(push(tab.navPath));
+  };
+};
+
+export const pushPath = (path) => {
+  return (dispatch) => {
+    dispatch(push(path));
   };
 };
 

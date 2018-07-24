@@ -1,13 +1,24 @@
-import {getActivities} from '@src/app/lib/activityService';
+import {getActivities, getActivityDetailById} from '@src/app/lib/activityService';
+import * as userApi from '@src/app/lib/userService';
+import {pushPath, REACT_ROUTER_PUSH_ACTION} from '@src/app/reducers/tab';
 import {ActivityLogicState, PageItem} from '@src/types/application';
 
 const LOAD_MEETING = 'LOAD_MEETING';
+const ACTIVITY_FOCUS_USER = 'ACTIVITY_FOCUS_USER';
+const FETCH_ACTIVITY_DETAIL = 'FETCH_ACTIVITY_DETAIL';
 
 const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
+export const focusUser = (userId) => {
+  return (dispatch, getState) => {
+    userApi.getUserById(userId).then(
+      res => dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data})
+    );
+  };
+};
 
-export const fetchActivity = (pageIndex) => {
+export const fetchActivity = (userId, pageIndex) => {
   return (dispatch) => {
-    getActivities(pageIndex)
+    getActivities(userId, pageIndex)
       .then(
         (res) => dispatch(loadMeeting(res.data))
       );
@@ -32,7 +43,7 @@ export const pageNav = (pageIndex) => {
         currentPageIndex = pageIndex;
     }
 
-    getActivities(currentPageIndex)
+    getActivities(activityLogic.focusUserId, currentPageIndex)
       .then(
         (res) => dispatch(loadMeeting(res.data))
       );
@@ -50,6 +61,23 @@ export const getCurrentPageIndex = (pages: PageItem[]) => {
   }
 };
 
+export const showActivityDetail = (meetingId) => {
+  return (dispatch, getState) => {
+    dispatch(pushPath(`/application/auth-wait/activities/activity-detail/${meetingId}`));
+  };
+};
+
+export const focusActivity = (activityId) => {
+  return (dispatch, getState) => {
+    getActivityDetailById(activityId).then(
+      res => dispatch({
+        type: FETCH_ACTIVITY_DETAIL,
+        payload: res.data,
+      })
+    );
+  };
+};
+
 export default (
   state: ActivityLogicState = {
     pages: [{
@@ -60,6 +88,9 @@ export default (
       active: false,
     }],
     pageSize: 20,
+    focusUserId: null,
+    focusUser: null,
+    focusActivity: null,
     activities: [],
   },
   action
@@ -69,6 +100,22 @@ export default (
       return {
         ...state,
         activities: action.payload,
+      };
+    case ACTIVITY_FOCUS_USER:
+      return {
+        ...state,
+        focusUserId: action.payload.id,
+        focusUser: action.payload,
+      };
+    case REACT_ROUTER_PUSH_ACTION:
+      return {
+        ...state,
+        focusUserId: action.payload.location.pathname.includes('user-sign-in-activities')
+          ? state.focusUserId
+          : null,
+        focusUser: action.payload.location.pathname.includes('user-sign-in-activities')
+          ? state.focusUser
+          : null,
       };
     default:
       return state;

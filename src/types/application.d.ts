@@ -64,6 +64,9 @@ export type User = {
 export type ActivityLogicState = {
   pages: PageItem[];
   pageSize: number;
+  focusUserId: number;
+  focusUser: User;
+  focusActivity: Activity;
   activities: Activity[];
 };
 

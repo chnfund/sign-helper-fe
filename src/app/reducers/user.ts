@@ -1,6 +1,7 @@
 import {USER_AUTH_STATE} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {PageItem, User, UserLogicState} from '@src/types/application';
+import {pushPath} from '@src/app/reducers/tab';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -107,6 +108,12 @@ export const getCurrentPageIndex = (pages: PageItem[]) => {
 
 export const filterUserBuyAuthState = (users: User[], authState: number) => {
   return users.filter(u => u.authenticateState === authState);
+};
+
+export const showSignedActivity = (userId) => {
+  return (dispatch, getState) => {
+    dispatch(pushPath(`/application/auth-wait/users/user-sign-in-activities/${userId}`));
+  };
 };
 
 export default (

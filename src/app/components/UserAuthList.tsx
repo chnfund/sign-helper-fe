@@ -7,7 +7,7 @@ import {AppState, PageItem, User} from '@src/types/application';
 import {
   authUser,
   fetchUsers, filterUserBuyAuthState,
-  showAuthUnpassDialog, userPageNav
+  showAuthUnpassDialog, showSignedActivity, userPageNav
 } from '../reducers/user';
 
 type Props = {
@@ -158,6 +158,7 @@ export default connect((
     authUserHandler: authUser,
     showAuthUnpassDialogHandler: showAuthUnpassDialog,
     pageNavHandler: userPageNav,
+    showSignedActivityHandler: showSignedActivity,
   }
 )
 (UserAuthList);
