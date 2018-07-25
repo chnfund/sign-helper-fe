@@ -75,7 +75,6 @@ export default (
       return {
         ...state,
         loginCaptcha: '',
-        loginPhoneNumber: '',
         token: action.payload,
       };
     default:
