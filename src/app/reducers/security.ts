@@ -2,7 +2,7 @@ import {push} from 'react-router-redux';
 
 import * as userApi from '@src/app/lib/userService';
 import {showMessage} from '@src/app/reducers/message';
-import {TOKEN_KEY} from '@src/commons/const';
+import {LOGIN_PHONE_NUMBER, TOKEN_KEY} from '@src/commons/const';
 import {SecurityLogicState} from '@src/types/application';
 
 const LOGIN_PHONE_NUMBER_CHANGE = 'LOGIN_PHONE_NUMBER_CHANGE';
@@ -38,6 +38,7 @@ export const loginSubmit = () => {
       .then(res => {
         if (res.data.success) {
           localStorage.setItem(TOKEN_KEY, res.data.data);
+          localStorage.setItem(LOGIN_PHONE_NUMBER, loginPhoneNumber);
           dispatch(loginSuccess(res.data.data));
           dispatch(push('application'));
         } else {
@@ -53,6 +54,13 @@ export const verifyToken = () => {
     if (token === null) {
       dispatch(push('/auth'));
     }
+  };
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    localStorage.removeItem(TOKEN_KEY);
+    dispatch(push('/auth'));
   };
 };
 

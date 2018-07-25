@@ -157,11 +157,40 @@ html body {
 }
 
 .App-header {
-  background-color: #222;
-  height: 40px;
-  padding: 5px;
-  color: white;
+  background-color: #F4F8FB;
+  height: 50px;
   margin-bottom: 30px;
+}
+
+.app-header-title {
+  line-height: 50px;
+  height: 50px;
+  font-size: 20px;
+  margin-left: 20px;
+  width: 200px;
+  display: inline-block;
+}
+
+.app-header-userInfo {
+  float: right;
+  display: inline-block;
+  line-height: 50px;
+  height: 50px;
+  font-size: 16px;
+  margin-left: 20px;
+  width: 100px;
+}
+
+.app-header-logout {
+  float: right;
+  display: inline-block;
+  line-height: 50px;
+  height: 50px;
+  font-size: 16px;
+  margin-left: 20px;
+  width: 100px;
+  color: #34ABF6;
+  border: none;
 }
 
 .App-title {
@@ -345,6 +374,7 @@ html body {
   float: left;
   display: block;
   margin: 10px 0 0 30px;
+  cursor: pointer;
 }
 
 .nav-back-username {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import {HOST} from '@src/commons/config';
 import {convertToParams, headerWithToken} from '@src/app/util/fetchUtils';
+import {HOST} from '@src/commons/config';
 
 export const requestCaptcha = (loginPhoneNumber: string) => {
   return axios.post(`${HOST}/sms/send-captcha`, {

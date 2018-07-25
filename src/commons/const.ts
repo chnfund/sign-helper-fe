@@ -1,4 +1,5 @@
 export const TOKEN_KEY = 'token';
+export const LOGIN_PHONE_NUMBER = 'login_phone_number';
 // 系统代码
 export const SYS_CODE = {
   // 用户未登录

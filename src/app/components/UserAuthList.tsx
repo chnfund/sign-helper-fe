@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import Pagination from '@src/app/components/Pagination';
 import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/commons/const';
+import noBusinessCardImg from '@src/resource/image/no-bussiness-card.png';
 import {AppState, Page, User} from '@src/types/application';
 import {
   authUser,
@@ -53,7 +54,7 @@ class UserAuthList extends React.Component<Props> {
             onClick={() => showAuthUnpassDialogHandler(tmpUser.id)}
           >
             不通过
-          </button>) : <button className="operate-btn" disabled={true}>不通过</button>);
+          </button>) : <button className="operate-btn  btn-disable" disabled={true}>不通过</button>);
       };
 
       const authSuccessBtn = (tmpUser: User) => {
@@ -111,7 +112,11 @@ class UserAuthList extends React.Component<Props> {
         {users.map(user => (
           <div key={user.id} className="table-row content-row">
             <div className="table-row-part flex-d-row">
-              <div className="company-card-img-holder float-left"/>
+              <img
+                className="company-card-img-holder float-left"
+                src={user.businessCard !== null ? user.businessCard : noBusinessCardImg}
+              />
+              {noBusinessCardImg}
               <div className="custom-info float-left">
                 <div className="flex-1">
                   {user.companyType === COMPANY_TYPE.Insti ? user.companySubTypeName : '上市公司'}
@@ -126,7 +131,7 @@ class UserAuthList extends React.Component<Props> {
                   }
                 </div>
                 <div className="flex-1">
-                  {user.fullName}&nbsp;&nbsp;{user.position}
+                  {user.fullName ? user.fullName + ' ' : ''}{user.position}
                 </div>
                 <div className="flex-1">
                   {user.mobile}

@@ -20,7 +20,8 @@ import ActivityDetail from '@src/app/components/ActivityDetail';
 import ActivityList from '@src/app/components/ActivityList';
 import UserAuthList from '@src/app/components/UserAuthList';
 import UserSingInActivityList from '@src/app/components/UserSingInActivityList';
-import {USER_AUTH_STATE} from '@src/commons/const';
+import {logout} from '@src/app/reducers/security';
+import {LOGIN_PHONE_NUMBER, USER_AUTH_STATE} from '@src/commons/const';
 import {Activity, AppState, TabItem} from '@src/types/application';
 
 type Props = {
@@ -34,6 +35,7 @@ type Props = {
   unpassOpeConfirmHandler: () => any;
   toggleTabHandler: () => any;
   checkPathHandler: () => any;
+  logoutHandler: () => any;
 };
 
 class Application extends React.Component<Props> {
@@ -53,6 +55,7 @@ class Application extends React.Component<Props> {
       unpassOpeConfirmHandler,
       toggleTabHandler,
       checkPathHandler,
+      logoutHandler,
     } = this.props;
 
     const handleReasonChange = (evt) => {
@@ -63,7 +66,9 @@ class Application extends React.Component<Props> {
     return (
       <div className="App">
         <header className="App-header text-align-left">
-          小程序审核后台
+          <div className="app-header-title">小程序审核后台</div>
+          <button className="app-header-logout" onClick={logoutHandler}>登出</button>
+          <div className="app-header-userInfo">{localStorage.getItem(LOGIN_PHONE_NUMBER)}</div>
         </header>
         <div className="main-space-wrapper">
           <TabNav
@@ -156,5 +161,6 @@ export default connect(
     unpassOpeConfirmHandler: unpassOpeConfirm,
     toggleTabHandler: navPath,
     checkPathHandler: checkPath,
+    logoutHandler: logout,
   }
 )(Application);
