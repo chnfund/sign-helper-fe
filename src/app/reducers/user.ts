@@ -1,7 +1,8 @@
 import {USER_AUTH_STATE} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
-import {PageItem, User, UserLogicState} from '@src/types/application';
+import {FETCH_ACTIVITY_DETAIL} from '@src/app/reducers/activity';
 import {pushPath} from '@src/app/reducers/tab';
+import {PageItem, User, UserLogicState} from '@src/types/application';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
@@ -184,6 +185,11 @@ export default (
             {...p, active: true} :
             {...p, active: false}
         ),
+      };
+    case FETCH_ACTIVITY_DETAIL:
+      return {
+        ...state,
+        users: action.payload.signinUsers,
       };
     default:
       return state;

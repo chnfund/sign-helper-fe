@@ -62,13 +62,8 @@ class Application extends React.Component<Props> {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <div className="App-logo float-left">🐯</div>
-          <div className="App-logo float-left">🐯</div>
-          <div className="App-logo float-left">🐯</div>
-          <div className="App-logo float-left">🐯</div>
-          <div className="App-logo float-left">🐯</div>
-          <div className="App-logo float-left">🐯</div>
+        <header className="App-header text-align-left">
+          小程序审核后台
         </header>
         <div className="main-space-wrapper">
           <TabNav

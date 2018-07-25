@@ -5,7 +5,7 @@ import {ActivityLogicState, PageItem} from '@src/types/application';
 
 const LOAD_MEETING = 'LOAD_MEETING';
 const ACTIVITY_FOCUS_USER = 'ACTIVITY_FOCUS_USER';
-const FETCH_ACTIVITY_DETAIL = 'FETCH_ACTIVITY_DETAIL';
+export const FETCH_ACTIVITY_DETAIL = 'FETCH_ACTIVITY_DETAIL';
 
 const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
 export const focusUser = (userId) => {

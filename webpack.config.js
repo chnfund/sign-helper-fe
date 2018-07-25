@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const Path = require('path');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const EncodingPlugin = require('webpack-encoding-plugin');
 
 const isProduction = process.argv.indexOf('-p') >= 0;
 const isDev = process.argv.indexOf('-dev') >= 0;
@@ -105,10 +106,16 @@ module.exports = {
   },
   plugins: isProduction || !isDev ? [
     new webpack.optimize.AggressiveMergingPlugin(),
-    new HtmlWebpackPlugin({template: 'index.html'})
+    new HtmlWebpackPlugin({template: 'index.html', hash: true}),
+    new EncodingPlugin({
+      encoding: 'utf-8'
+    })
   ] : [
     new webpack.optimize.AggressiveMergingPlugin(),
-    new HtmlWebpackPlugin({template: 'index.html'}),
+    new HtmlWebpackPlugin({template: 'index.html', hash: true}),
+    new EncodingPlugin({
+      encoding: 'utf-8'
+    }),
     new DashboardPlugin()
   ],
   devServer:

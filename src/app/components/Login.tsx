@@ -38,7 +38,7 @@ class Login extends React.Component<Props> {
       <div className="loginBg">
         <div className="login-dialog">
           <div className="login-dialog-header">
-            登陆小程序审核后台
+            登录小程序审核后台
           </div>
           <div className="login-dialog-content">
             <input
@@ -56,7 +56,7 @@ class Login extends React.Component<Props> {
               onChange={handleLoginCaptchaChange}
             />
             <button className="login-get-captcha" onClick={getCaptchaHandler}>获取验证码</button>
-            <button className="operate-btn btn-success login-confirm-btn" onClick={loginSubmitHandler}>登陆</button>
+            <button className="operate-btn btn-success login-confirm-btn" onClick={loginSubmitHandler}>登录</button>
           </div>
         </div>
       </div>
