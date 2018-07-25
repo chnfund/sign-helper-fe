@@ -11,7 +11,7 @@ const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
 export const focusUser = (userId) => {
   return (dispatch, getState) => {
     userApi.getUserById(userId).then(
-      res => dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data})
+      res => dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data.data})
     );
   };
 };
@@ -20,7 +20,7 @@ export const fetchActivity = (userId, pageIndex) => {
   return (dispatch) => {
     getActivities(userId, pageIndex)
       .then(
-        (res) => dispatch(loadMeeting(res.data))
+        (res) => dispatch(loadMeeting(res.data.data))
       );
   };
 };
@@ -45,7 +45,7 @@ export const pageNav = (pageIndex) => {
 
     getActivities(activityLogic.focusUserId, currentPageIndex)
       .then(
-        (res) => dispatch(loadMeeting(res.data))
+        (res) => dispatch(loadMeeting(res.data.data))
       );
 
     // dispatch(activePage(currentPageIndex));
@@ -72,7 +72,7 @@ export const focusActivity = (activityId) => {
     getActivityDetailById(activityId).then(
       res => dispatch({
         type: FETCH_ACTIVITY_DETAIL,
-        payload: res.data,
+        payload: res.data.data,
       })
     );
   };

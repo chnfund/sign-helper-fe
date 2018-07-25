@@ -21,7 +21,7 @@ export const getCaptcha = () => {
     const {loginPhoneNumber} = getState().securityLogic;
     userApi.requestCaptcha(loginPhoneNumber)
       .then(res => {
-        if (res.success) {
+        if (res.data.success) {
           dispatch(showWaitCaptchaMessage());
         }
       });
@@ -33,12 +33,12 @@ export const loginSubmit = () => {
     const {loginPhoneNumber, loginCaptcha} = getState().securityLogic;
     userApi.loginSubmit(loginPhoneNumber, loginCaptcha)
       .then(res => {
-        if (res.success) {
-          localStorage.setItem(TOKEN_KEY, res.data);
-          dispatch(loginSuccess(res.data));
+        if (res.data.success) {
+          localStorage.setItem(TOKEN_KEY, res.data.data);
+          dispatch(loginSuccess(res.data.data));
           dispatch(push('application'));
         } else {
-          dispatch(showMessage(res.data));
+          dispatch(showMessage(res.data.data));
         }
       });
   };

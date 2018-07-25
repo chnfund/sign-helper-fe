@@ -1,17 +1,14 @@
+import axios from 'axios';
+
 import {HOST} from '@src/app/commons/config';
 import {convertToParams, headerWithToken} from '@src/app/util/fetchUtils';
 
 export const getActivityDetailById = (activityId) => {
-  return fetch(`${HOST}/admin/meeting/get-auth-meeting-detail?${convertToParams({
+  return axios.get(`${HOST}/admin/meeting/get-auth-meeting-detail?${convertToParams({
     meetingId: activityId,
   })}`, {
-    method: 'GET',
-    headers: headerWithToken({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }),
-  })
-    .then(res => res.json());
+    headers: headerWithToken({}),
+  });
 };
 
 export const getActivities = (userId, pageIndex) => {
@@ -26,12 +23,7 @@ export const getActivities = (userId, pageIndex) => {
       pageIndex,
     };
   }
-  return fetch(`${HOST}/admin/meeting/list-meeting?${convertToParams(paramsObject)}`, {
-    method: 'GET',
-    headers: headerWithToken({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    }),
-  })
-    .then(res => res.json());
+  return axios.get(`${HOST}/admin/meeting/list-meeting?${convertToParams(paramsObject)}`, {
+    headers: headerWithToken({}),
+  });
 };

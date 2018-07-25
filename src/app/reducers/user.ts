@@ -22,7 +22,7 @@ export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
     userApi.getUsers(authState, pageIndex)
       .then((res) =>
-        dispatch(loadUsers(res.data))
+        dispatch(loadUsers(res.data.data))
       );
   };
 };
@@ -87,10 +87,10 @@ export const userPageNav = (authState, id) => {
 
     userApi.getUsers(authState, currentPageIndex)
       .then((res) => {
-          if (res.data.length === 0) {
+          if (res.data.data.length === 0) {
             return;
           }
-          return dispatch(loadUsers(res.data));
+          return dispatch(loadUsers(res.data.data));
         }
       );
 
