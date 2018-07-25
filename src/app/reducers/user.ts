@@ -3,21 +3,23 @@ import {FETCH_ACTIVITY_DETAIL} from '@src/app/reducers/activity';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath} from '@src/app/reducers/tab';
 import {USER_AUTH_STATE} from '@src/commons/const';
-import {PageItem, User, UserLogicState} from '@src/types/application';
+import {User, UserLogicState} from '@src/types/application';
 
 const LOAD_USERS = 'LOAD_USERS';
 const REPLACE_USER = 'REPLACE_USER';
 const USER_AUTH_UNPASS_REASON_CHANGE = 'USER_AUTH_UNPASS_REASON_CHANGE';
 const USER_AUTH_UNPASS_CANCEL = 'USER_AUTH_UNPASS_CANCEL';
 const SHOW_AUTH_UNPASS_DIALOG = 'SHOW_AUTH_UNPASS_DIALOG';
-const ACTIVE_USER_LIST_PAGE = 'ACTIVE_USER_LIST_PAGE';
+const USER_LIST_GO_TO_PAGE = 'USER_LIST_GO_TO_PAGE';
+const USER_LIST_PAGE_DISABLE_PREV = 'USER_LIST_PAGE_DISABLE_PREV';
+const USER_LIST_PAGE_DISABLE_NEXT = 'USER_LIST_PAGE_DISABLE_NEXT';
 
 const loadUsers = (users) => ({type: LOAD_USERS, payload: users});
 const replaceUser = (user) => ({type: REPLACE_USER, payload: user});
 export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REASON_CHANGE, payload: txt});
 export const userAuthUnpassOpeCancel = () => ({type: USER_AUTH_UNPASS_CANCEL});
 export const showAuthUnpassDialog = (id) => ({type: SHOW_AUTH_UNPASS_DIALOG, payload: id});
-export const activePage = (id) => ({type: ACTIVE_USER_LIST_PAGE, payload: id});
+export const activePage = (id) => ({type: USER_LIST_GO_TO_PAGE, payload: id});
 
 export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
@@ -77,11 +79,12 @@ export const unpassOpeConfirm = () => {
 export const userPageNav = (authState, id) => {
   return (dispatch, getState) => {
     const {userLogic} = getState();
-    let currentPageIndex = getCurrentPageIndex(userLogic.pages);
+    let currentPageIndex = userLogic.page.currentPageIndex;
     switch (id) {
       case '-1':
         if (currentPageIndex === 1) {
-          break;
+          dispatch({type: USER_LIST_PAGE_DISABLE_PREV});
+          return;
         }
         currentPageIndex = currentPageIndex - 1;
         break;
@@ -95,23 +98,21 @@ export const userPageNav = (authState, id) => {
     userApi.getUsers(authState, currentPageIndex)
       .then((res) => {
           if (res.data.data.length === 0) {
+            if (id === '-1') {
+              dispatch({type: USER_LIST_PAGE_DISABLE_PREV});
+            } else if (id === '+1') {
+              dispatch({type: USER_LIST_PAGE_DISABLE_NEXT});
+            }
             return;
+          } else {
+            dispatch(activePage(currentPageIndex));
+            dispatch(loadUsers(res.data.data));
           }
-          return dispatch(loadUsers(res.data.data));
         }
       );
 
     // dispatch(activePage(currentPageIndex));
   };
-};
-
-export const getCurrentPageIndex = (pages: PageItem[]) => {
-  const tmpItem = pages.find(p => p.active === true);
-  if (tmpItem) {
-    return tmpItem.id;
-  } else {
-    return 1;
-  }
 };
 
 export const filterUserBuyAuthState = (users: User[], authState: number) => {
@@ -126,14 +127,13 @@ export const showSignedActivity = (userId) => {
 
 export default (
   state: UserLogicState = {
-    pages: [{
-      id: 1,
-      active: true,
-    }, {
-      id: 2,
-      active: false,
-    }],
-    pageSize: 20,
+    page: {
+      pages: [1, 2],
+      currentPageIndex: 1,
+      pageSize: 20,
+      prevPageAvailable: true,
+      nextPageAvailable: true,
+    },
     users: [],
     authUnpassInfo: {
       userId: '',
@@ -184,19 +184,38 @@ export default (
           unpassDialogShow: false,
         },
       };
-    case ACTIVE_USER_LIST_PAGE:
-      return {
-        ...state,
-        pages: state.pages.map(p =>
-          p.id === action.payload ?
-            {...p, active: true} :
-            {...p, active: false}
-        ),
-      };
     case FETCH_ACTIVITY_DETAIL:
       return {
         ...state,
         users: action.payload.signinUsers,
+      };
+    case USER_LIST_GO_TO_PAGE:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          currentPageIndex: action.payload,
+          prevPageAvailable: true,
+          nextPageAvailable: true,
+        },
+      };
+    case USER_LIST_PAGE_DISABLE_PREV:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          prevPageAvailable: false,
+          nextPageAvailable: true,
+        },
+      };
+    case USER_LIST_PAGE_DISABLE_NEXT:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          prevPageAvailable: true,
+          nextPageAvailable: false,
+        },
       };
     default:
       return state;

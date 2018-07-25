@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import Pagination from '@src/app/components/Pagination';
 import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/commons/const';
-import {AppState, PageItem, User} from '@src/types/application';
+import {AppState, Page, User} from '@src/types/application';
 import {
   authUser,
   fetchUsers, filterUserBuyAuthState,
@@ -14,7 +14,7 @@ type Props = {
   autoLoad: boolean;
   pageable: boolean;
   authState: number;
-  pages: PageItem[];
+  page: Page;
   pageSize: number;
   users: User[];
   pageNavHandler: any;
@@ -37,7 +37,7 @@ class UserAuthList extends React.Component<Props> {
     const {
       pageable,
       users,
-      pages,
+      page,
       authUserHandler,
       showAuthUnpassDialogHandler,
       showSignedActivityHandler,
@@ -142,7 +142,7 @@ class UserAuthList extends React.Component<Props> {
           </div>
         ))}
         {pageable ?
-          <Pagination className="normal-list-pagination" pages={pages} clickHandler={pageNavClickHandler()}/>
+          <Pagination className="normal-list-pagination" page={page} clickHandler={pageNavClickHandler()}/>
           : ''
         }
       </div>
@@ -154,7 +154,7 @@ export default connect((
   state: AppState,
   props: any
   ) => ({
-    pages: state.userLogic.pages,
+    page: state.userLogic.page,
     users: filterUserBuyAuthState(state.userLogic.users, props.authState),
   }),
   {

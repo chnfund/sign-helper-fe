@@ -34,8 +34,7 @@ export type TabItem = {
 };
 
 export type UserLogicState = {
-  pages: PageItem[];
-  pageSize: number;
+  page: Page;
   users: User[];
   authUnpassInfo: AuthUnpassInfo;
 };
@@ -62,8 +61,7 @@ export type User = {
 };
 
 export type ActivityLogicState = {
-  pages: PageItem[];
-  pageSize: number;
+  page: Page;
   focusUserId: number;
   focusUser: User;
   focusActivity: Activity;
@@ -87,7 +85,10 @@ export type AuthUnpassInfo = {
   unpassDialogShow: false;
 };
 
-export type PageItem = {
-  id: number;
-  active: boolean;
+export type Page = {
+  pages: number[];
+  pageSize: number;
+  currentPageIndex: number;
+  prevPageAvailable: boolean;
+  nextPageAvailable: boolean;
 };

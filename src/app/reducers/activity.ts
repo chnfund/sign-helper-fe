@@ -2,13 +2,17 @@ import {getActivities, getActivityDetailById} from '@src/app/lib/activityService
 import * as userApi from '@src/app/lib/userService';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath, REACT_ROUTER_PUSH_ACTION} from '@src/app/reducers/tab';
-import {ActivityLogicState, PageItem} from '@src/types/application';
+import {ActivityLogicState} from '@src/types/application';
 
 const LOAD_MEETING = 'LOAD_MEETING';
 const ACTIVITY_FOCUS_USER = 'ACTIVITY_FOCUS_USER';
 export const FETCH_ACTIVITY_DETAIL = 'FETCH_ACTIVITY_DETAIL';
+const ACTIVITY_LIST_GO_TO_PAGE = 'ACTIVITY_LIST_GO_TO_PAGE';
+const ACTIVITY_LIST_PAGE_DISABLE_PREV = 'ACTIVITY_LIST_PAGE_DISABLE_PREV';
+const ACTIVITY_LIST_PAGE_DISABLE_NEXT = 'ACTIVITY_LIST_PAGE_DISABLE_NEXT';
 
 const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
+export const activePage = (id) => ({type: ACTIVITY_LIST_GO_TO_PAGE, payload: id});
 
 export const focusUser = (userId) => {
   return (dispatch, getState) => {
@@ -38,11 +42,12 @@ export const fetchActivity = (userId, pageIndex) => {
 export const pageNav = (pageIndex) => {
   return (dispatch, getState) => {
     const {activityLogic} = getState();
-    let currentPageIndex = getCurrentPageIndex(activityLogic.pages);
+    let currentPageIndex = activityLogic.page.currentPageIndex;
     switch (pageIndex) {
       case '-1':
         if (currentPageIndex === 1) {
-          break;
+          dispatch({type: ACTIVITY_LIST_PAGE_DISABLE_PREV});
+          return;
         }
         currentPageIndex = currentPageIndex - 1;
         break;
@@ -54,21 +59,22 @@ export const pageNav = (pageIndex) => {
     }
 
     getActivities(activityLogic.focusUserId, currentPageIndex)
-      .then(
-        (res) => dispatch(loadMeeting(res.data.data))
-      );
+      .then((res) => {
+        if (res.data.data.length === 0) {
+          if (pageIndex === '-1') {
+            dispatch({type: ACTIVITY_LIST_PAGE_DISABLE_PREV});
+          } else if (pageIndex === '+1') {
+            dispatch({type: ACTIVITY_LIST_PAGE_DISABLE_NEXT});
+          }
+          return;
+        } else {
+          dispatch(activePage(currentPageIndex));
+          dispatch(loadMeeting(res.data.data));
+        }
+      });
 
     // dispatch(activePage(currentPageIndex));
   };
-};
-
-export const getCurrentPageIndex = (pages: PageItem[]) => {
-  const tmpItem = pages.find(p => p.active === true);
-  if (tmpItem) {
-    return tmpItem.id;
-  } else {
-    return 1;
-  }
 };
 
 export const showActivityDetail = (meetingId) => {
@@ -90,14 +96,13 @@ export const focusActivity = (activityId) => {
 
 export default (
   state: ActivityLogicState = {
-    pages: [{
-      id: 1,
-      active: true,
-    }, {
-      id: 2,
-      active: false,
-    }],
-    pageSize: 20,
+    page: {
+      pages: [1, 2],
+      currentPageIndex: 1,
+      pageSize: 20,
+      prevPageAvailable: true,
+      nextPageAvailable: true,
+    },
     focusUserId: null,
     focusUser: null,
     focusActivity: null,
@@ -131,6 +136,34 @@ export default (
       return {
         ...state,
         focusActivity: action.payload,
+      };
+    case ACTIVITY_LIST_GO_TO_PAGE:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          currentPageIndex: action.payload,
+          prevPageAvailable: true,
+          nextPageAvailable: true,
+        },
+      };
+    case ACTIVITY_LIST_PAGE_DISABLE_PREV:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          prevPageAvailable: false,
+          nextPageAvailable: true,
+        },
+      };
+    case ACTIVITY_LIST_PAGE_DISABLE_NEXT:
+      return {
+        ...state,
+        page: {
+          ...state.page,
+          prevPageAvailable: true,
+          nextPageAvailable: false,
+        },
       };
     default:
       return state;

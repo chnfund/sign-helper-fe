@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import {PageItem} from '@src/types/application';
+import {Page} from '@src/types/application';
 
 type Props = {
-  pages: PageItem[];
+  page: Page;
   clickHandler: any;
   style?: any;
   className?: string;
@@ -12,7 +12,7 @@ type Props = {
 class Pagination extends React.Component<Props> {
 
   render() {
-    const {clickHandler} = this.props;
+    const {page, clickHandler} = this.props;
 
     const clickHandlerWrapper = (evt) => clickHandler(evt.target.value);
 
@@ -20,7 +20,8 @@ class Pagination extends React.Component<Props> {
       <div style={...this.props.style} className={this.props.className}>
         <button
           key={'-1'}
-          className="btn btn-default"
+          className={'btn' + (page.prevPageAvailable ? ' btn-default' : ' btn-disable')}
+          disabled={!page.prevPageAvailable}
           onClick={clickHandlerWrapper}
           value={'-1'}
         >
@@ -39,7 +40,8 @@ class Pagination extends React.Component<Props> {
         {/*))}*/}
         <button
           key={'+1'}
-          className="btn btn-default"
+          className={'btn' + (page.nextPageAvailable ? ' btn-default' : ' btn-disable')}
+          disabled={!page.nextPageAvailable}
           onClick={clickHandlerWrapper}
           value={'+1'}
         >

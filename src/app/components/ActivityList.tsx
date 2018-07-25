@@ -3,9 +3,10 @@ import {connect} from 'react-redux';
 
 import Pagination from '@src/app/components/Pagination';
 import {fetchActivity, pageNav, showActivityDetail} from '@src/app/reducers/activity';
-import {Activity, AppState} from '@src/types/application';
+import {Activity, AppState, Page} from '@src/types/application';
 
 type Props = {
+  page: Page;
   focusUserId: number;
   pageable: boolean;
   activities: Activity[];
@@ -26,6 +27,7 @@ class ActivityList extends React.Component<Props> {
 
   render() {
     const {
+      page,
       pageable,
       activities,
       pageNavHandler,
@@ -59,7 +61,7 @@ class ActivityList extends React.Component<Props> {
           </div>
         ))}
         {pageable ?
-          <Pagination className="normal-list-pagination" pages={[]} clickHandler={pageNavHandler}/>
+          <Pagination className="normal-list-pagination" page={page} clickHandler={pageNavHandler}/>
           : ''
         }
       </div>
@@ -69,6 +71,7 @@ class ActivityList extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
+    page: state.activityLogic.page,
     activities: state.activityLogic.activities,
     focusUserId: state.activityLogic.focusUserId,
   }),
