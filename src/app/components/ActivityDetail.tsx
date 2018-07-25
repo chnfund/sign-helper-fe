@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {USER_AUTH_STATE} from '@src/app/commons/const';
+import {USER_AUTH_STATE} from '@src/commons/const';
 import UserAuthList from '@src/app/components/UserAuthList';
 import {focusActivity} from '@src/app/reducers/activity';
 import {Activity, AppState} from '@src/types/application';
@@ -51,7 +51,7 @@ class ActivityDetail extends React.Component<Props> {
                 </div>
               </div>
             </div>
-            <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE}/>
+            <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE} autoLoad={false}/>
           </div>
           : ''}
       </div>

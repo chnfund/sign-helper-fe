@@ -1,4 +1,4 @@
-import {SYS_CODE, TOKEN_KEY} from '@src/app/commons/const';
+import {SYS_CODE, TOKEN_KEY} from '@src/commons/const';
 
 export const headerWithToken = (otherHeader) => ({
   ...otherHeader,

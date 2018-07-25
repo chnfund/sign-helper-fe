@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/app/commons/const';
+import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/commons/const';
 import Pagination from '@src/app/components/Pagination';
 import {AppState, PageItem, User} from '@src/types/application';
 import {
@@ -11,6 +11,7 @@ import {
 } from '../reducers/user';
 
 type Props = {
+  autoLoad: boolean;
   pageable: boolean;
   authState: number;
   pages: PageItem[];
@@ -21,12 +22,15 @@ type Props = {
   authUserHandler: (id: number, authState: number, userCategory: number) => any;
   showAuthUnpassDialogHandler: any;
   showSignedActivityHandler: any;
+  match: any;
 };
 
 class UserAuthList extends React.Component<Props> {
 
   componentDidMount() {
-    this.props.fetchUserHandler(this.props.authState, 1);
+    if (this.props.autoLoad) {
+      this.props.fetchUserHandler(this.props.authState, 1);
+    }
   }
 
   render() {
@@ -56,7 +60,7 @@ class UserAuthList extends React.Component<Props> {
         if (tmpUser.companyType === COMPANY_TYPE.Insti) {
           return (
             <button
-              className={'operate-btn' + (tmpUser.authenticateState !== USER_AUTH_STATE.PASS ? ' btn-info' : '')}
+              className={'operate-btn' + (tmpUser.authenticateState !== USER_AUTH_STATE.PASS ? ' btn-info' : ' btn-disable')}
               disabled={tmpUser.authenticateState === USER_AUTH_STATE.PASS}
               onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, null)}
             >
@@ -67,14 +71,14 @@ class UserAuthList extends React.Component<Props> {
           return (
             <div>
               <button
-                className={'operate-btn' + (tmpUser.userCategory === USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                className={'operate-btn' + (tmpUser.userCategory === USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? ' btn-disable' : ' btn-info')}
                 disabled={tmpUser.userCategory === USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS}
                 onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, USER_CATEGORY.Company.IR)}
               >
                 IR
               </button>
               <button
-                className={'operate-btn' + (tmpUser.userCategory !== USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? '' : ' btn-info')}
+                className={'operate-btn' + (tmpUser.userCategory !== USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS ? ' btn-disable' : ' btn-info')}
                 disabled={tmpUser.userCategory !== USER_CATEGORY.Company.IR && tmpUser.authenticateState === USER_AUTH_STATE.PASS}
                 onClick={() => authUserHandler(tmpUser.id, USER_AUTH_STATE.PASS, USER_CATEGORY.Company.NONE_IR)}
               >

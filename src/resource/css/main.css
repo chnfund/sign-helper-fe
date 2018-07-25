@@ -387,6 +387,7 @@ html body {
   margin-right: 30px;
   font-size: 12px;
   color: #FFFFFF;
+  cursor: pointer;
 }
 
 .btn {
@@ -414,6 +415,10 @@ html body {
 
 .btn-warn {
   background-color: #F3A536;
+}
+
+.btn-disable {
+  cursor: not-allowed;
 }
 
 .activity-sign-count {
@@ -555,4 +560,19 @@ a {
 
 .login-confirm-btn {
   margin-top: 20px;
+}
+
+.message-wrapper {
+  width: 200px;
+  height: 100px;
+  border: 1px solid #6a6a6a;
+  box-shadow: 0 0 5px #888888;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: #000;
+  border-left: 10px solid #16a6aa;
+  color: #f0f26d;
+  padding: 14px;
+  font-size: 14px;
 }

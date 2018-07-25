@@ -16,11 +16,11 @@ import {
   userAuthUnpassReasonChange
 } from '@src/app/reducers/user';
 
-import {USER_AUTH_STATE} from '@src/app/commons/const';
 import ActivityDetail from '@src/app/components/ActivityDetail';
 import ActivityList from '@src/app/components/ActivityList';
 import UserAuthList from '@src/app/components/UserAuthList';
 import UserSingInActivityList from '@src/app/components/UserSingInActivityList';
+import {USER_AUTH_STATE} from '@src/commons/const';
 import {Activity, AppState, TabItem} from '@src/types/application';
 
 type Props = {
@@ -85,7 +85,7 @@ class Application extends React.Component<Props> {
               exact={true}
               path="/application/auth-wait/users"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE}/>
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE} autoLoad={true}/>
               )}
             />
             <Route
@@ -99,14 +99,14 @@ class Application extends React.Component<Props> {
               exact={true}
               path="/application/auth-finish/pass"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.PASS}/>
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.PASS} autoLoad={true}/>
               )}
             />
             <Route
               exact={true}
               path="/application/auth-finish/deny"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.DENY}/>
+                <UserAuthList pageable={true} authState={USER_AUTH_STATE.DENY} autoLoad={true}/>
               )}
             />
             <Route

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {HOST} from '@src/app/commons/config';
+import {HOST} from '@src/commons/config';
 import {convertToParams, headerWithToken} from '@src/app/util/fetchUtils';
 
 export const requestCaptcha = (loginPhoneNumber: string) => {

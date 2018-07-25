@@ -8,7 +8,7 @@ import {Provider} from 'react-redux';
 import RootRouterApp from '@src/app/components/RootRouterApp';
 import store from '@src/store';
 
-import {APP_CONTEXT_PATH} from '@src/app/commons/config';
+import {APP_CONTEXT_PATH} from '@src/commons/config';
 import {saveState} from '@src/localStorage';
 import mainStyle from '@src/resource/css/main.css';
 import normalizeStyle from '@src/resource/css/normalize.css';

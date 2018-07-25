@@ -1,7 +1,8 @@
-import {USER_AUTH_STATE} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
 import {FETCH_ACTIVITY_DETAIL} from '@src/app/reducers/activity';
+import {showMessage} from '@src/app/reducers/message';
 import {pushPath} from '@src/app/reducers/tab';
+import {USER_AUTH_STATE} from '@src/commons/const';
 import {PageItem, User, UserLogicState} from '@src/types/application';
 
 const LOAD_USERS = 'LOAD_USERS';
@@ -20,10 +21,16 @@ export const activePage = (id) => ({type: ACTIVE_USER_LIST_PAGE, payload: id});
 
 export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
+    dispatch(showMessage('加载用户数据...'));
     userApi.getUsers(authState, pageIndex)
-      .then((res) =>
-        dispatch(loadUsers(res.data.data))
-      );
+      .then((res) => {
+        if (res.data.success) {
+          dispatch(loadUsers(res.data.data));
+          dispatch(showMessage('用户数据加载完成!'));
+        } else {
+          dispatch(showMessage('用户数据加载失败:' + res.data.msg));
+        }
+      });
   };
 };
 

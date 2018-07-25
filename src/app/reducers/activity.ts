@@ -1,5 +1,6 @@
 import {getActivities, getActivityDetailById} from '@src/app/lib/activityService';
 import * as userApi from '@src/app/lib/userService';
+import {showMessage} from '@src/app/reducers/message';
 import {pushPath, REACT_ROUTER_PUSH_ACTION} from '@src/app/reducers/tab';
 import {ActivityLogicState, PageItem} from '@src/types/application';
 
@@ -8,10 +9,19 @@ const ACTIVITY_FOCUS_USER = 'ACTIVITY_FOCUS_USER';
 export const FETCH_ACTIVITY_DETAIL = 'FETCH_ACTIVITY_DETAIL';
 
 const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
+
 export const focusUser = (userId) => {
   return (dispatch, getState) => {
+    dispatch(showMessage('开始载入选择用户的信息...'));
     userApi.getUserById(userId).then(
-      res => dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data.data})
+      res => {
+        if (res.data.success) {
+          dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data.data});
+          dispatch(showMessage('载入选择用户的信息完成'));
+        } else {
+          dispatch(showMessage('载入选择用户的信息出错: ' + res.data.msg));
+        }
+      }
     );
   };
 };

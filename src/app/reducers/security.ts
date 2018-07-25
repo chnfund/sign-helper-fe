@@ -1,28 +1,31 @@
 import {push} from 'react-router-redux';
 
-import {TOKEN_KEY} from '@src/app/commons/const';
 import * as userApi from '@src/app/lib/userService';
+import {showMessage} from '@src/app/reducers/message';
+import {TOKEN_KEY} from '@src/commons/const';
 import {SecurityLogicState} from '@src/types/application';
 
 const LOGIN_PHONE_NUMBER_CHANGE = 'LOGIN_PHONE_NUMBER_CHANGE';
 const LOGIN_CAPTCHA_CHANGE = 'LOGIN_CAPTCHA_CHANGE';
 const SHOW_WAIT_CAPTCHA_MESSAGE = 'SHOW_WAIT_CAPTCHA_MESSAGE';
-const SHOW_MESSAGE = 'SHOW_MESSAGE';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export const loginPhoneNC = (txt) => ({type: LOGIN_PHONE_NUMBER_CHANGE, payload: txt});
 export const loginCaptchaC = (txt) => ({type: LOGIN_CAPTCHA_CHANGE, payload: txt});
 const showWaitCaptchaMessage = () => ({type: SHOW_WAIT_CAPTCHA_MESSAGE});
 const loginSuccess = (token) => ({type: LOGIN_SUCCESS, payload: token});
-const showMessage = (msg) => ({type: SHOW_MESSAGE, payload: msg});
 
 export const getCaptcha = () => {
   return (dispatch, getState) => {
     const {loginPhoneNumber} = getState().securityLogic;
+    dispatch(showMessage('发送获取验证码请求..'));
     userApi.requestCaptcha(loginPhoneNumber)
       .then(res => {
         if (res.data.success) {
           dispatch(showWaitCaptchaMessage());
+          dispatch(showMessage('验证码获取成功!'));
+        } else {
+          dispatch(showMessage('验证码获取失败, 错误消息:' + res.data.msg));
         }
       });
   };
@@ -38,7 +41,7 @@ export const loginSubmit = () => {
           dispatch(loginSuccess(res.data.data));
           dispatch(push('application'));
         } else {
-          dispatch(showMessage(res.data.data));
+          dispatch(showMessage('登陆失败:' + res.data.msg));
         }
       });
   };
