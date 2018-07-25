@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import {USER_AUTH_STATE} from '@src/commons/const';
 import UserAuthList from '@src/app/components/UserAuthList';
 import {focusActivity} from '@src/app/reducers/activity';
+import {USER_AUTH_STATE} from '@src/commons/const';
 import {Activity, AppState} from '@src/types/application';
 import {connect} from 'react-redux';
 

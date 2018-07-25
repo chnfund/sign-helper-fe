@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 
-import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/commons/const';
 import Pagination from '@src/app/components/Pagination';
+import {COMPANY_TYPE, USER_AUTH_STATE, USER_CATEGORY} from '@src/commons/const';
 import {AppState, PageItem, User} from '@src/types/application';
 import {
   authUser,
@@ -114,7 +114,7 @@ class UserAuthList extends React.Component<Props> {
               <div className="company-card-img-holder float-left"/>
               <div className="custom-info float-left">
                 <div className="flex-1">
-                  {user.companySubTypeName}
+                  {user.companyType === COMPANY_TYPE.Insti ? user.companySubTypeName : '上市公司'}
                   {!(user.signinCount > 0) ?
                     '' :
                     <div
