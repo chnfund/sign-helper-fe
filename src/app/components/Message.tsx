@@ -9,6 +9,8 @@ class Message extends React.Component<Props> {
     return (
       <div className="message-wrapper">
         <div className="message-default">
+          DEBUG INFO:
+          <hr/>
           {this.props.message}
         </div>
       </div>

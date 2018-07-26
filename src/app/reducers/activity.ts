@@ -2,7 +2,9 @@ import {getActivities, getActivityDetailById} from '@src/app/lib/activityService
 import * as userApi from '@src/app/lib/userService';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath, REACT_ROUTER_PUSH_ACTION} from '@src/app/reducers/tab';
+import {getPagesByPageSizeAndTotalNumber} from '@src/app/reducers/user';
 import {handleErrors} from '@src/app/util/fetchUtils';
+import {GLOBAL_PAGE_SIZE} from '@src/commons/config';
 import {ActivityLogicState} from '@src/types/application';
 
 const LOAD_MEETING = 'LOAD_MEETING';
@@ -33,7 +35,7 @@ export const fetchActivity = (userId, pageIndex) => {
     getActivities(userId, pageIndex)
       .then(
         res => handleErrors(res, dispatch, (filterRes) => {
-          dispatch(loadMeeting(filterRes.data.data.list));
+          dispatch(loadMeeting(filterRes.data.data));
           dispatch(showMessage('载入会议信息完成'));
         })
       );
@@ -56,7 +58,7 @@ export const pageNav = (pageIndex) => {
         currentPageIndex = currentPageIndex + 1;
         break;
       default:
-        currentPageIndex = pageIndex;
+        currentPageIndex = Number(pageIndex);
     }
 
     getActivities(activityLogic.focusUserId, currentPageIndex)
@@ -70,7 +72,7 @@ export const pageNav = (pageIndex) => {
           return;
         } else {
           dispatch(activePage(currentPageIndex));
-          dispatch(loadMeeting(filterRes.data.data.list));
+          dispatch(loadMeeting(filterRes.data.data));
         }
       }));
   };
@@ -100,7 +102,7 @@ export default (
     page: {
       pages: [1, 2],
       currentPageIndex: 1,
-      pageSize: 20,
+      pageSize: GLOBAL_PAGE_SIZE,
       prevPageAvailable: true,
       nextPageAvailable: true,
     },
@@ -115,7 +117,11 @@ export default (
     case LOAD_MEETING:
       return {
         ...state,
-        activities: action.payload,
+        activities: action.payload.list,
+        page: {
+          ...state.page,
+          pages: getPagesByPageSizeAndTotalNumber(action.payload.count, GLOBAL_PAGE_SIZE),
+        },
       };
     case ACTIVITY_FOCUS_USER:
       return {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {Page} from '@src/types/application';
+import {GLOBAL_PAGE_SHOW_FLOAT_RANGE} from '@src/commons/config';
 
 type Props = {
   page: Page;
@@ -13,7 +14,6 @@ class Pagination extends React.Component<Props> {
 
   render() {
     const {page, clickHandler} = this.props;
-
     const clickHandlerWrapper = (evt) => clickHandler(evt.target.value);
 
     return (
@@ -27,17 +27,23 @@ class Pagination extends React.Component<Props> {
         >
           {'<'}
         </button>
-        {/*{this.props.pages.map(p => (*/}
-          {/*<button*/}
-            {/*key={p.id}*/}
-            {/*className={'btn' + (p.active ? ' btn-info' : ' btn-default')}*/}
-            {/*disabled={p.active}*/}
-            {/*onClick={clickHandlerWrapper}*/}
-            {/*value={p.id}*/}
-          {/*>*/}
-            {/*{p.id}*/}
-          {/*</button>*/}
-        {/*))}*/}
+        {this.props.page.pages.map(p =>
+          (p > this.props.page.currentPageIndex - GLOBAL_PAGE_SHOW_FLOAT_RANGE)
+          && (p < this.props.page.currentPageIndex + GLOBAL_PAGE_SHOW_FLOAT_RANGE)
+            ? (
+              <button
+                key={p}
+                className={'btn' + (p === this.props.page.currentPageIndex ? ' btn-info' : ' btn-default')}
+                disabled={p === this.props.page.currentPageIndex}
+                onClick={clickHandlerWrapper}
+                value={p}
+              >
+                {p}
+              </button>
+            )
+            : ''
+        )
+        }
         <button
           key={'+1'}
           className={'btn' + (page.nextPageAvailable ? ' btn-default' : ' btn-disable')}

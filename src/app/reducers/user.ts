@@ -3,6 +3,7 @@ import {FETCH_ACTIVITY_DETAIL} from '@src/app/reducers/activity';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath} from '@src/app/reducers/tab';
 import {handleErrors} from '@src/app/util/fetchUtils';
+import {GLOBAL_PAGE_SIZE} from '@src/commons/config';
 import {USER_AUTH_STATE} from '@src/commons/const';
 import {User, UserLogicState} from '@src/types/application';
 
@@ -15,7 +16,7 @@ const USER_LIST_GO_TO_PAGE = 'USER_LIST_GO_TO_PAGE';
 const USER_LIST_PAGE_DISABLE_PREV = 'USER_LIST_PAGE_DISABLE_PREV';
 const USER_LIST_PAGE_DISABLE_NEXT = 'USER_LIST_PAGE_DISABLE_NEXT';
 
-const loadUsers = (users) => ({type: LOAD_USERS, payload: users});
+const loadUsers = (data) => ({type: LOAD_USERS, payload: data});
 const replaceUser = (user) => ({type: REPLACE_USER, payload: user});
 export const userAuthUnpassReasonChange = (txt) => ({type: USER_AUTH_UNPASS_REASON_CHANGE, payload: txt});
 export const userAuthUnpassOpeCancel = () => ({type: USER_AUTH_UNPASS_CANCEL});
@@ -27,7 +28,7 @@ export const fetchUsers = (authState: number, pageIndex) => {
     dispatch(showMessage('加载用户数据...'));
     userApi.getUsers(authState, pageIndex)
       .then(res => handleErrors(res, dispatch, (filterRes) => {
-        dispatch(loadUsers(filterRes.data.data.list));
+        dispatch(loadUsers(filterRes.data.data));
         dispatch(showMessage('用户数据加载完成!'));
       }));
   };
@@ -93,12 +94,12 @@ export const userPageNav = (authState, id) => {
         currentPageIndex = currentPageIndex + 1;
         break;
       default:
-        currentPageIndex = id;
+        currentPageIndex = Number(id);
     }
 
     userApi.getUsers(authState, currentPageIndex)
       .then(res => handleErrors(res, dispatch, (filterRes) => {
-        if (filterRes.data.data.length === 0) {
+        if (filterRes.data.data.list.length === 0) {
           if (id === '-1') {
             dispatch({type: USER_LIST_PAGE_DISABLE_PREV});
           } else if (id === '+1') {
@@ -107,7 +108,7 @@ export const userPageNav = (authState, id) => {
           return;
         } else {
           dispatch(activePage(currentPageIndex));
-          dispatch(loadUsers(filterRes.data.data.list));
+          dispatch(loadUsers(filterRes.data.data));
         }
       }));
   };
@@ -123,12 +124,21 @@ export const showSignedActivity = (userId) => {
   };
 };
 
+export const getPagesByPageSizeAndTotalNumber = (totalNumber, pageSize = GLOBAL_PAGE_SIZE) => {
+  const pageCount = Math.floor(totalNumber / pageSize) + Math.ceil((totalNumber % pageSize) / pageSize);
+  const pages = [pageCount];
+  for (let i = 0; i < pageCount; i++) {
+    pages[i] = i + 1;
+  }
+  return pages;
+};
+
 export default (
   state: UserLogicState = {
     page: {
       pages: [1, 2],
       currentPageIndex: 1,
-      pageSize: 20,
+      pageSize: GLOBAL_PAGE_SIZE,
       prevPageAvailable: true,
       nextPageAvailable: true,
     },
@@ -143,7 +153,14 @@ export default (
 ) => {
   switch (action.type) {
     case LOAD_USERS:
-      return {...state, users: action.payload};
+      return {
+        ...state,
+        users: action.payload.list,
+        page: {
+          ...state.page,
+          pages: getPagesByPageSizeAndTotalNumber(action.payload.count, GLOBAL_PAGE_SIZE),
+        },
+      };
     case REPLACE_USER:
       return {
         ...state,
