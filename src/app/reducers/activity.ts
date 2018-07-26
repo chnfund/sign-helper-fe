@@ -23,7 +23,7 @@ export const focusUser = (userId) => {
           dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data.data});
           dispatch(showMessage('载入选择用户的信息完成'));
         } else {
-          dispatch(showMessage('载入选择用户的信息出错: ' + res.data.msg));
+          dispatch(showMessage(res.data.msg));
         }
       }
     );
@@ -72,8 +72,6 @@ export const pageNav = (pageIndex) => {
           dispatch(loadMeeting(res.data.data.list));
         }
       });
-
-    // dispatch(activePage(currentPageIndex));
   };
 };
 

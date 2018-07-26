@@ -31,7 +31,7 @@ export const getCaptcha = () => {
           // show count down message.
           smsSendCountDown(dispatch, showSmsCountDownNumber, smsSendRecovery);
         } else {
-          dispatch(showMessage('验证码获取失败, 错误消息:' + res.data.msg));
+          dispatch(showMessage(res.data.msg));
         }
       });
   };
@@ -64,9 +64,10 @@ export const loginSubmit = () => {
           localStorage.setItem(TOKEN_KEY, res.data.data);
           localStorage.setItem(LOGIN_PHONE_NUMBER, loginPhoneNumber);
           dispatch(loginSuccess(res.data.data));
+          dispatch(showMessage('登陆成功!'));
           dispatch(push('application'));
         } else {
-          dispatch(showMessage('登陆失败:' + res.data.msg));
+          dispatch(showMessage(res.data.msg));
         }
       });
   };

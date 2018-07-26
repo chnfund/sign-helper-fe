@@ -30,7 +30,7 @@ export const fetchUsers = (authState: number, pageIndex) => {
           dispatch(loadUsers(res.data.data.list));
           dispatch(showMessage('用户数据加载完成!'));
         } else {
-          dispatch(showMessage('用户数据加载失败:' + res.data.msg));
+          dispatch(showMessage(res.data.msg));
         }
       });
   };
