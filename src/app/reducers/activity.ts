@@ -35,8 +35,12 @@ export const fetchActivity = (userId, pageIndex) => {
     getActivities(userId, pageIndex)
       .then(
         res => handleErrors(res, dispatch, (filterRes) => {
-          dispatch(loadMeeting(filterRes.data.data));
-          dispatch(showMessage('载入会议信息完成'));
+          if (filterRes.data.data.list != null && filterRes.data.data.list.length > 0) {
+            dispatch(loadMeeting(filterRes.data.data));
+            dispatch(showMessage('载入会议信息完成'));
+          } else {
+            dispatch(showMessage('暂无会议数据'));
+          }
         })
       );
   };

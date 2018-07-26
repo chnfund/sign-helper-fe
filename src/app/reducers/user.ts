@@ -28,8 +28,12 @@ export const fetchUsers = (authState: number, pageIndex) => {
     dispatch(showMessage('加载用户数据...'));
     userApi.getUsers(authState, pageIndex)
       .then(res => handleErrors(res, dispatch, (filterRes) => {
-        dispatch(loadUsers(filterRes.data.data));
-        dispatch(showMessage('用户数据加载完成!'));
+        if (filterRes.data.data.list != null && filterRes.data.data.list.length > 0) {
+          dispatch(loadUsers(filterRes.data.data));
+          dispatch(showMessage('用户数据加载完成!'));
+        } else {
+          dispatch(showMessage('暂时没有用户数据!'));
+        }
       }));
   };
 };
@@ -125,8 +129,9 @@ export const showSignedActivity = (userId) => {
 };
 
 export const getPagesByPageSizeAndTotalNumber = (totalNumber, pageSize = GLOBAL_PAGE_SIZE) => {
-  const pageCount = Math.floor(totalNumber / pageSize) + Math.ceil((totalNumber % pageSize) / pageSize);
-  const pages = [pageCount];
+  const pageCount = Math.floor(totalNumber / pageSize)
+    + Math.ceil((totalNumber % pageSize) / pageSize);
+  const pages = [];
   for (let i = 0; i < pageCount; i++) {
     pages[i] = i + 1;
   }
