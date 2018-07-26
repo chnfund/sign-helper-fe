@@ -452,8 +452,7 @@ html body {
 
 .btn-disable {
   background-color: #a1a0a0;
-  color: #3e3e3e !important;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .activity-sign-count {

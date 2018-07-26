@@ -2,6 +2,7 @@ import * as userApi from '@src/app/lib/userService';
 import {FETCH_ACTIVITY_DETAIL} from '@src/app/reducers/activity';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath} from '@src/app/reducers/tab';
+import {handleErrors} from '@src/app/util/fetchUtils';
 import {USER_AUTH_STATE} from '@src/commons/const';
 import {User, UserLogicState} from '@src/types/application';
 
@@ -25,14 +26,10 @@ export const fetchUsers = (authState: number, pageIndex) => {
   return (dispatch) => {
     dispatch(showMessage('加载用户数据...'));
     userApi.getUsers(authState, pageIndex)
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(loadUsers(res.data.data.list));
-          dispatch(showMessage('用户数据加载完成!'));
-        } else {
-          dispatch(showMessage(res.data.msg));
-        }
-      });
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        dispatch(loadUsers(filterRes.data.data.list));
+        dispatch(showMessage('用户数据加载完成!'));
+      }));
   };
 };
 
@@ -52,7 +49,9 @@ export const authUser = (id, authState, userCategory) => {
       tmpUser.userCategory,
       tmpUser.authenticateDenyReason
     )
-      .then(res => dispatch(replaceUser(tmpUser)));
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        dispatch(replaceUser(tmpUser));
+      }));
   };
 };
 
@@ -72,7 +71,9 @@ export const unpassOpeConfirm = () => {
       tmpUser.userCategory,
       tmpUser.authenticateDenyReason
     )
-      .then(res => dispatch(replaceUser(tmpUser)));
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        dispatch(replaceUser(tmpUser));
+      }));
   };
 };
 
@@ -96,22 +97,19 @@ export const userPageNav = (authState, id) => {
     }
 
     userApi.getUsers(authState, currentPageIndex)
-      .then((res) => {
-          if (res.data.data.length === 0) {
-            if (id === '-1') {
-              dispatch({type: USER_LIST_PAGE_DISABLE_PREV});
-            } else if (id === '+1') {
-              dispatch({type: USER_LIST_PAGE_DISABLE_NEXT});
-            }
-            return;
-          } else {
-            dispatch(activePage(currentPageIndex));
-            dispatch(loadUsers(res.data.data.list));
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        if (filterRes.data.data.length === 0) {
+          if (id === '-1') {
+            dispatch({type: USER_LIST_PAGE_DISABLE_PREV});
+          } else if (id === '+1') {
+            dispatch({type: USER_LIST_PAGE_DISABLE_NEXT});
           }
+          return;
+        } else {
+          dispatch(activePage(currentPageIndex));
+          dispatch(loadUsers(filterRes.data.data.list));
         }
-      );
-
-    // dispatch(activePage(currentPageIndex));
+      }));
   };
 };
 

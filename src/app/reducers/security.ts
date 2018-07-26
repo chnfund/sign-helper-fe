@@ -2,6 +2,7 @@ import {push} from 'react-router-redux';
 
 import * as userApi from '@src/app/lib/userService';
 import {showMessage} from '@src/app/reducers/message';
+import {handleErrors} from '@src/app/util/fetchUtils';
 import {LOGIN_PHONE_NUMBER, TOKEN_KEY} from '@src/commons/const';
 import {SecurityLogicState} from '@src/types/application';
 
@@ -24,16 +25,12 @@ export const getCaptcha = () => {
     const {loginPhoneNumber} = getState().securityLogic;
     dispatch(showMessage('发送获取验证码请求..'));
     userApi.requestCaptcha(loginPhoneNumber)
-      .then(res => {
-        if (res.data.success) {
-          dispatch(showWaitCaptchaMessage());
-          dispatch(showMessage('验证码获取成功!'));
-          // show count down message.
-          smsSendCountDown(dispatch, showSmsCountDownNumber, smsSendRecovery);
-        } else {
-          dispatch(showMessage(res.data.msg));
-        }
-      });
+      .then(res => handleErrors(res, dispatch, () => {
+        dispatch(showWaitCaptchaMessage());
+        dispatch(showMessage('验证码获取成功!'));
+        // show count down message.
+        smsSendCountDown(dispatch, showSmsCountDownNumber, smsSendRecovery);
+      }));
   };
 };
 
@@ -59,17 +56,13 @@ export const loginSubmit = () => {
   return (dispatch, getState) => {
     const {loginPhoneNumber, loginCaptcha} = getState().securityLogic;
     userApi.loginSubmit(loginPhoneNumber, loginCaptcha)
-      .then(res => {
-        if (res.data.success) {
-          localStorage.setItem(TOKEN_KEY, res.data.data);
-          localStorage.setItem(LOGIN_PHONE_NUMBER, loginPhoneNumber);
-          dispatch(loginSuccess(res.data.data));
-          dispatch(showMessage('登陆成功!'));
-          dispatch(push('application'));
-        } else {
-          dispatch(showMessage(res.data.msg));
-        }
-      });
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        localStorage.setItem(TOKEN_KEY, filterRes.data.data);
+        localStorage.setItem(LOGIN_PHONE_NUMBER, loginPhoneNumber);
+        dispatch(loginSuccess(filterRes.data.data));
+        dispatch(showMessage('登陆成功!'));
+        dispatch(push('application'));
+      }));
   };
 };
 

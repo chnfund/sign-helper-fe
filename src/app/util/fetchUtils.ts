@@ -1,21 +1,38 @@
+import {showMessage} from '@src/app/reducers/message';
+import {pushPath} from '@src/app/reducers/tab';
 import {SYS_CODE, TOKEN_KEY} from '@src/commons/const';
+import {AxiosResponse} from 'axios';
 
 export const headerWithToken = (otherHeader) => ({
   ...otherHeader,
   token: localStorage.getItem(TOKEN_KEY),
 });
 
-export const processResult = (result, dispatch) => {
-  if (result.success) {
-    return result.data;
-  } else {
-    processError(result, dispatch);
-  }
-};
+/**
+ * 处理axios以及确定状态码的错误.
+ * 程序员只需关注正确获取数据后的逻辑问题即可
+ * @param {AxiosResponse} axiosData
+ * @param dispatch
+ * @param callback
+ */
+export const handleErrors = (axiosData: AxiosResponse, dispatch, callback) => {
 
-export const processError = (result, dispatch) => {
-  if (result.data === SYS_CODE.NOT_LOGIN) {
-    console.log(result.data);
+  if (axiosData.status === 500) {
+    dispatch(showMessage('SERVER 500 ERROR!'));
+    return;
+  }
+  if (axiosData.data.data === SYS_CODE.NOT_LOGIN) {
+    dispatch(pushPath('/auth'));
+    return;
+  }
+  if (axiosData.data.success === false) {
+    dispatch(showMessage(axiosData.data.msg));
+    return;
+  }
+  // Make sure the callback is a function
+  if (typeof callback === 'function') {
+    // Call it, since we have confirmed it is callable
+    callback(axiosData);
   }
 };
 

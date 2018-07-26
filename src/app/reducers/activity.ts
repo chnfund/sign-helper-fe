@@ -2,6 +2,7 @@ import {getActivities, getActivityDetailById} from '@src/app/lib/activityService
 import * as userApi from '@src/app/lib/userService';
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath, REACT_ROUTER_PUSH_ACTION} from '@src/app/reducers/tab';
+import {handleErrors} from '@src/app/util/fetchUtils';
 import {ActivityLogicState} from '@src/types/application';
 
 const LOAD_MEETING = 'LOAD_MEETING';
@@ -18,23 +19,23 @@ export const focusUser = (userId) => {
   return (dispatch, getState) => {
     dispatch(showMessage('开始载入选择用户的信息...'));
     userApi.getUserById(userId).then(
-      res => {
-        if (res.data.success) {
-          dispatch({type: ACTIVITY_FOCUS_USER, payload: res.data.data});
-          dispatch(showMessage('载入选择用户的信息完成'));
-        } else {
-          dispatch(showMessage(res.data.msg));
-        }
-      }
+      res => handleErrors(res, dispatch, (filterRes) => {
+        dispatch({type: ACTIVITY_FOCUS_USER, payload: filterRes.data.data});
+        dispatch(showMessage('载入选择用户的信息完成'));
+      })
     );
   };
 };
 
 export const fetchActivity = (userId, pageIndex) => {
   return (dispatch) => {
+    dispatch(showMessage('开始载入会议信息...'));
     getActivities(userId, pageIndex)
       .then(
-        (res) => dispatch(loadMeeting(res.data.data.list))
+        res => handleErrors(res, dispatch, (filterRes) => {
+          dispatch(loadMeeting(filterRes.data.data.list));
+          dispatch(showMessage('载入会议信息完成'));
+        })
       );
   };
 };
@@ -59,8 +60,8 @@ export const pageNav = (pageIndex) => {
     }
 
     getActivities(activityLogic.focusUserId, currentPageIndex)
-      .then((res) => {
-        if (res.data.data.list.length === 0) {
+      .then(res => handleErrors(res, dispatch, (filterRes) => {
+        if (filterRes.data.data.list.length === 0) {
           if (pageIndex === '-1') {
             dispatch({type: ACTIVITY_LIST_PAGE_DISABLE_PREV});
           } else if (pageIndex === '+1') {
@@ -69,9 +70,9 @@ export const pageNav = (pageIndex) => {
           return;
         } else {
           dispatch(activePage(currentPageIndex));
-          dispatch(loadMeeting(res.data.data.list));
+          dispatch(loadMeeting(filterRes.data.data.list));
         }
-      });
+      }));
   };
 };
 
@@ -84,9 +85,11 @@ export const showActivityDetail = (meetingId) => {
 export const focusActivity = (activityId) => {
   return (dispatch, getState) => {
     getActivityDetailById(activityId).then(
-      res => dispatch({
-        type: FETCH_ACTIVITY_DETAIL,
-        payload: res.data.data,
+      res => handleErrors(res, dispatch, (filterRes) => {
+        dispatch({
+          type: FETCH_ACTIVITY_DETAIL,
+          payload: filterRes.data.data,
+        });
       })
     );
   };
