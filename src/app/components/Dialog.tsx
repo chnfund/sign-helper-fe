@@ -16,7 +16,7 @@ class Dialog extends React.Component<Props> {
       <div>
         <div className="dialog-header">
           <div className="dialog-header-title">{title}</div>
-          <div className="dialog-h-close-icon">&times;</div>
+          <div className="dialog-h-close-icon" onClick={cancelHandler}>&times;</div>
         </div>
         <div className="dialog-content">{children}</div>
         <div className="dialog-footer">

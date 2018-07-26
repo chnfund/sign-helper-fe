@@ -67,7 +67,7 @@ class Application extends React.Component<Props> {
       <div className="App">
         <header className="App-header text-align-left">
           <div className="app-header-title">小程序审核后台</div>
-          <button className="app-header-logout" onClick={logoutHandler}>登出</button>
+          <div className="app-header-logout" onClick={logoutHandler}>登出</div>
           <div className="app-header-userInfo">{localStorage.getItem(LOGIN_PHONE_NUMBER)}</div>
         </header>
         <div className="main-space-wrapper">

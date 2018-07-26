@@ -42,6 +42,8 @@ export type UserLogicState = {
 export type SecurityLogicState = {
   loginPhoneNumber: string;
   loginCaptcha: string;
+  getCaptchaAvailable: boolean;
+  smsSendCountDownNumber: number;
 };
 
 export type User = {

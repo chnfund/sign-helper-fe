@@ -27,7 +27,7 @@ export const fetchUsers = (authState: number, pageIndex) => {
     userApi.getUsers(authState, pageIndex)
       .then((res) => {
         if (res.data.success) {
-          dispatch(loadUsers(res.data.data));
+          dispatch(loadUsers(res.data.data.list));
           dispatch(showMessage('用户数据加载完成!'));
         } else {
           dispatch(showMessage('用户数据加载失败:' + res.data.msg));
@@ -106,7 +106,7 @@ export const userPageNav = (authState, id) => {
             return;
           } else {
             dispatch(activePage(currentPageIndex));
-            dispatch(loadUsers(res.data.data));
+            dispatch(loadUsers(res.data.data.list));
           }
         }
       );

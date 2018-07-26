@@ -9,11 +9,15 @@ const LOGIN_PHONE_NUMBER_CHANGE = 'LOGIN_PHONE_NUMBER_CHANGE';
 const LOGIN_CAPTCHA_CHANGE = 'LOGIN_CAPTCHA_CHANGE';
 const SHOW_WAIT_CAPTCHA_MESSAGE = 'SHOW_WAIT_CAPTCHA_MESSAGE';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const SHOW_SMS_COUNT_DOWN_NUMBER_ACTION = 'SHOW_SMS_COUNT_DOWN_NUMBER_ACTION';
+const SMS_SEND_RECOVERY = 'SMS_SEND_RECOVERY';
 
 export const loginPhoneNC = (txt) => ({type: LOGIN_PHONE_NUMBER_CHANGE, payload: txt});
 export const loginCaptchaC = (txt) => ({type: LOGIN_CAPTCHA_CHANGE, payload: txt});
 const showWaitCaptchaMessage = () => ({type: SHOW_WAIT_CAPTCHA_MESSAGE});
 const loginSuccess = (token) => ({type: LOGIN_SUCCESS, payload: token});
+const showSmsCountDownNumber = (n) => ({type: SHOW_SMS_COUNT_DOWN_NUMBER_ACTION, payload: n});
+const smsSendRecovery = () => ({type: SMS_SEND_RECOVERY});
 
 export const getCaptcha = () => {
   return (dispatch, getState) => {
@@ -24,11 +28,31 @@ export const getCaptcha = () => {
         if (res.data.success) {
           dispatch(showWaitCaptchaMessage());
           dispatch(showMessage('验证码获取成功!'));
+          // show count down message.
+          smsSendCountDown(dispatch, showSmsCountDownNumber, smsSendRecovery);
         } else {
           dispatch(showMessage('验证码获取失败, 错误消息:' + res.data.msg));
         }
       });
   };
+};
+
+// 递归 实现发送验证码倒计时
+export const smsSendCountDown = (dispatch, showSmsCountDownNumberAction, recoveryAction, countNumber = 60) => {
+  if (countNumber === 0) {
+    countNumber = 60;
+    dispatch(recoveryAction());
+    return;
+  } else {
+    countNumber--;
+    dispatch(showSmsCountDownNumberAction(countNumber));
+  }
+  setTimeout(
+    () => {
+      smsSendCountDown(dispatch, showSmsCountDownNumberAction, recoveryAction, countNumber);
+    },
+    1000
+  );
 };
 
 export const loginSubmit = () => {
@@ -68,6 +92,8 @@ export default (
   state: SecurityLogicState = {
     loginPhoneNumber: '',
     loginCaptcha: '',
+    getCaptchaAvailable: true,
+    smsSendCountDownNumber: 20,
   },
   action
 ) => {
@@ -87,6 +113,21 @@ export default (
         ...state,
         loginCaptcha: '',
         token: action.payload,
+      };
+    case SMS_SEND_RECOVERY:
+      return {
+        ...state,
+        getCaptchaAvailable: true,
+      };
+    case SHOW_WAIT_CAPTCHA_MESSAGE:
+      return {
+        ...state,
+        getCaptchaAvailable: false,
+      };
+    case SHOW_SMS_COUNT_DOWN_NUMBER_ACTION:
+      return {
+        ...state,
+        smsSendCountDownNumber: action.payload,
       };
     default:
       return state;

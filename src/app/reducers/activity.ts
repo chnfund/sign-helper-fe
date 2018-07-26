@@ -34,7 +34,7 @@ export const fetchActivity = (userId, pageIndex) => {
   return (dispatch) => {
     getActivities(userId, pageIndex)
       .then(
-        (res) => dispatch(loadMeeting(res.data.data))
+        (res) => dispatch(loadMeeting(res.data.data.list))
       );
   };
 };
@@ -60,7 +60,7 @@ export const pageNav = (pageIndex) => {
 
     getActivities(activityLogic.focusUserId, currentPageIndex)
       .then((res) => {
-        if (res.data.data.length === 0) {
+        if (res.data.data.list.length === 0) {
           if (pageIndex === '-1') {
             dispatch({type: ACTIVITY_LIST_PAGE_DISABLE_PREV});
           } else if (pageIndex === '+1') {
@@ -69,7 +69,7 @@ export const pageNav = (pageIndex) => {
           return;
         } else {
           dispatch(activePage(currentPageIndex));
-          dispatch(loadMeeting(res.data.data));
+          dispatch(loadMeeting(res.data.data.list));
         }
       });
 

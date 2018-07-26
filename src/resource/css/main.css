@@ -191,6 +191,7 @@ html body {
   width: 100px;
   color: #34ABF6;
   border: none;
+  cursor: pointer;
 }
 
 .App-title {
@@ -451,6 +452,7 @@ html body {
 
 .btn-disable {
   background-color: #a1a0a0;
+  color: #3e3e3e !important;
   cursor: not-allowed;
 }
 
@@ -585,10 +587,13 @@ a {
   height: 40px;
   width: 100px;
   margin: 20px 0 0 0;
-  padding: 12px;
+  padding: 12px 0;
   display: inline-block;
+  color: #2593FB;
   background-color: transparent;
   border: none;
+  cursor: pointer;
+  text-align: center;
 }
 
 .login-confirm-btn {

@@ -7,6 +7,8 @@ import {AppState} from '@src/types/application';
 type Props = {
   loginPhoneNumber: string;
   loginCaptcha: string;
+  getCaptchaAvailable: boolean;
+  smsSendCountDownNumber: number;
   loginPhoneNCHandler: any;
   loginCaptchaCHandler: any;
   getCaptchaHandler: any;
@@ -18,10 +20,12 @@ class Login extends React.Component<Props> {
     const {
       loginPhoneNumber,
       loginCaptcha,
+      smsSendCountDownNumber,
       getCaptchaHandler,
       loginSubmitHandler,
       loginPhoneNCHandler,
       loginCaptchaCHandler,
+      getCaptchaAvailable,
     } = this.props;
 
     const handleLoginPhoneNumberChange = (evt) => {
@@ -55,7 +59,13 @@ class Login extends React.Component<Props> {
               value={loginCaptcha}
               onChange={handleLoginCaptchaChange}
             />
-            <button className="login-get-captcha" onClick={getCaptchaHandler}>获取验证码</button>
+            <button
+              className={'login-get-captcha' + (getCaptchaAvailable ? '' : ' btn-disable')}
+              onClick={getCaptchaHandler}
+              disabled={!getCaptchaAvailable}
+            >
+              {getCaptchaAvailable ? '获取验证码' : `重新获取(${smsSendCountDownNumber})`}
+            </button>
             <button className="operate-btn btn-success login-confirm-btn" onClick={loginSubmitHandler}>登录</button>
           </div>
         </div>
@@ -68,6 +78,8 @@ export default connect(
   (state: AppState) => ({
     loginPhoneNumber: state.securityLogic.loginPhoneNumber,
     loginCaptcha: state.securityLogic.loginCaptcha,
+    getCaptchaAvailable: state.securityLogic.getCaptchaAvailable,
+    smsSendCountDownNumber: state.securityLogic.smsSendCountDownNumber,
   }),
   {
     loginPhoneNCHandler: loginPhoneNC,
