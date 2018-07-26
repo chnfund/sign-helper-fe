@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {Page} from '@src/types/application';
 import {GLOBAL_PAGE_SHOW_FLOAT_RANGE} from '@src/commons/config';
+import {Page} from '@src/types/application';
 
 type Props = {
   page: Page;
