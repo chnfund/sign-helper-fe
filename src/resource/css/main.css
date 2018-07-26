@@ -365,6 +365,19 @@ html body {
   flex: 1;
 }
 
+.table-content {
+  width: 100%;
+  min-height: 500px;
+  display: inline-block;
+}
+
+.table-content-placeholder {
+  margin: 160px auto 0;
+  font-size: 20px;
+  text-align: center;
+  color: #bcbbbb;
+}
+
 .user-sign-in-activities-header {
   height: 90px;
 }

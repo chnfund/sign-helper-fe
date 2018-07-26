@@ -109,43 +109,51 @@ class UserAuthList extends React.Component<Props> {
           <span className="table-header-item text-align-left">用户个人资料 | 来源</span>
           <span className="table-header-item">审核结果</span>
         </div>
-        {users.map(user => (
-          <div key={user.id} className="table-row content-row">
-            <div className="table-row-part flex-d-row">
-              <img
-                className="company-card-img-holder float-left"
-                src={user.businessCard !== null ? user.businessCard : noBusinessCardImg}
-              />
-              {noBusinessCardImg}
-              <div className="custom-info float-left">
-                <div className="flex-1">
-                  {user.companyType === COMPANY_TYPE.Insti ? user.companySubTypeName : '上市公司'}
-                  {!(user.signinCount > 0) ?
-                    '' :
-                    <div
-                      className="activity-sign-count"
-                      onClick={() => showSignedActivityHandler(user.id)}
-                    >
-                      签到过{user.signinCount}场会议
-                    </div>
-                  }
-                </div>
-                <div className="flex-1">
-                  {user.fullName ? user.fullName + ' ' : ''}{user.position}
-                </div>
-                <div className="flex-1">
-                  {user.mobile}
-                </div>
-                <div className="flex-1">
-                  {user.companyName}
-                </div>
+        {users.length === 0
+          ? (
+            <div className="table-content">
+              <div className="table-content-placeholder">
+                - 暂无数据 -
               </div>
             </div>
-            <div className="table-row-part">
-              {genUserOpBtns(user)}
+          )
+          : users.map(user => (
+            <div key={user.id} className="table-row content-row">
+              <div className="table-row-part flex-d-row">
+                <img
+                  className="company-card-img-holder float-left"
+                  src={user.businessCard !== null ? user.businessCard : noBusinessCardImg}
+                />
+                {noBusinessCardImg}
+                <div className="custom-info float-left">
+                  <div className="flex-1">
+                    {user.companyType === COMPANY_TYPE.Insti ? user.companySubTypeName : '上市公司'}
+                    {!(user.signinCount > 0) ?
+                      '' :
+                      <div
+                        className="activity-sign-count"
+                        onClick={() => showSignedActivityHandler(user.id)}
+                      >
+                        签到过{user.signinCount}场会议
+                      </div>
+                    }
+                  </div>
+                  <div className="flex-1">
+                    {user.fullName ? user.fullName + ' ' : ''}{user.position}
+                  </div>
+                  <div className="flex-1">
+                    {user.mobile}
+                  </div>
+                  <div className="flex-1">
+                    {user.companyName}
+                  </div>
+                </div>
+              </div>
+              <div className="table-row-part">
+                {genUserOpBtns(user)}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         {pageable ?
           <Pagination className="normal-list-pagination" page={page} clickHandler={pageNavClickHandler()}/>
           : ''

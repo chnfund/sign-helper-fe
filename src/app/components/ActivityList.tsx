@@ -36,7 +36,15 @@ class ActivityList extends React.Component<Props> {
 
     return (
       <div>
-        {activities.map(meeting => (
+        {activities.length === 0
+          ? (
+            <div className="table-content">
+              <div className="table-content-placeholder">
+                - 暂无数据 -
+              </div>
+            </div>
+          )
+          : activities.map(meeting => (
           <div key={meeting.id} className="table-row content-row" onClick={() => showActivityDetailHandler(meeting.id)}>
             <div className="table-row-part flex-d-row">
               <div className="float-left">
