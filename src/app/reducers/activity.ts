@@ -90,12 +90,14 @@ export const showActivityDetail = (meetingId) => {
 
 export const focusActivity = (activityId) => {
   return (dispatch, getState) => {
+    dispatch(showMessage('开始载入会议详情信息...'))
     getActivityDetailById(activityId).then(
       res => handleErrors(res, dispatch, (filterRes) => {
         dispatch({
           type: FETCH_ACTIVITY_DETAIL,
           payload: filterRes.data.data,
         });
+        dispatch(showMessage('会议详情载入完成!'));
       })
     );
   };

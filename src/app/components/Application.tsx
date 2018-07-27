@@ -90,7 +90,12 @@ class Application extends React.Component<Props> {
               exact={true}
               path="/application/auth-wait/users"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE} autoLoad={true}/>
+                <UserAuthList
+                  pageable={true}
+                  authState={USER_AUTH_STATE.NONE}
+                  autoLoad={true}
+                  signinCountNavAvailable={true}
+                />
               )}
             />
             <Route
@@ -104,14 +109,24 @@ class Application extends React.Component<Props> {
               exact={true}
               path="/application/auth-finish/pass"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.PASS} autoLoad={true}/>
+                <UserAuthList
+                  pageable={true}
+                  authState={USER_AUTH_STATE.PASS}
+                  autoLoad={true}
+                  signinCountNavAvailable={true}
+                />
               )}
             />
             <Route
               exact={true}
               path="/application/auth-finish/deny"
               render={() => (
-                <UserAuthList pageable={true} authState={USER_AUTH_STATE.DENY} autoLoad={true}/>
+                <UserAuthList
+                  pageable={true}
+                  authState={USER_AUTH_STATE.DENY}
+                  autoLoad={true}
+                  signinCountNavAvailable={true}
+                />
               )}
             />
             <Route

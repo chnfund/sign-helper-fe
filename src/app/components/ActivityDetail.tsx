@@ -51,7 +51,12 @@ class ActivityDetail extends React.Component<Props> {
                 </div>
               </div>
             </div>
-            <UserAuthList pageable={true} authState={USER_AUTH_STATE.NONE} autoLoad={false}/>
+            <UserAuthList
+              pageable={true}
+              authState={USER_AUTH_STATE.NONE}
+              autoLoad={false}
+              signinCountNavAvailable={false}
+            />
           </div>
           : ''}
       </div>

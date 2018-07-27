@@ -13,6 +13,7 @@ import {
 
 type Props = {
   autoLoad: boolean;
+  signinCountNavAvailable: boolean;
   pageable: boolean;
   authState: number;
   page: Page;
@@ -36,6 +37,7 @@ class UserAuthList extends React.Component<Props> {
 
   render() {
     const {
+      signinCountNavAvailable,
       pageable,
       users,
       page,
@@ -132,7 +134,11 @@ class UserAuthList extends React.Component<Props> {
                       '' :
                       <div
                         className="activity-sign-count"
-                        onClick={() => showSignedActivityHandler(user.id)}
+                        onClick={
+                          signinCountNavAvailable
+                            ? () => showSignedActivityHandler(user.id)
+                            : () => ({})
+                        }
                       >
                         签到过{user.signinCount}场会议
                       </div>
