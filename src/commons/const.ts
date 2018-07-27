@@ -39,3 +39,12 @@ export const USER_AUTH_STATE = {
   PASS: 1,
   DENY: 2,
 };
+
+export const MESSAGE_TYPE = {
+  DEBUG: 0,
+  INFO: 1,
+  SUCCESS: 2,
+  ERROR: 3,
+  WARN: 4,
+  LARGE_INFO: 5,
+};

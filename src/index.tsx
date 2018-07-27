@@ -10,6 +10,7 @@ import store from '@src/store';
 
 import {APP_CONTEXT_PATH} from '@src/commons/config';
 import {saveState} from '@src/localStorage';
+import fontStyle from '@src/resource/css/icon-font.css';
 import mainStyle from '@src/resource/css/main.css';
 import normalizeStyle from '@src/resource/css/normalize.css';
 import {cssRaw} from 'typestyle';
@@ -18,6 +19,7 @@ import {cssRaw} from 'typestyle';
 cssRaw(`
 ${normalizeStyle}
 ${mainStyle}
+${fontStyle}
 `);
 
 const history = createHistory({basename: APP_CONTEXT_PATH});

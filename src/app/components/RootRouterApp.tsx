@@ -11,6 +11,7 @@ import Message from '@src/app/components/Message';
 import Root from '@src/app/components/Root';
 import {verifyToken} from '@src/app/reducers/security';
 import {AppState} from '@src/types/application';
+import {MESSAGE_TYPE} from '@src/commons/const';
 
 type Props = {
   history: History;
@@ -36,7 +37,7 @@ class RootRouterApp extends React.Component<Props> {
             <Route path="/auth" component={Login}/>
             <Route path="/application" component={Application}/>
           </Switch>
-          <Message message={message}/>
+          <Message message={message} type={MESSAGE_TYPE.DEBUG}/>
         </Root>
       </ConnectedRouter>
     );
