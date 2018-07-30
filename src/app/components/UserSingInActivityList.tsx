@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import ActivityList from '@src/app/components/ActivityList';
 import {focusUser} from '@src/app/reducers/activity';
 import {AppState, User} from '@src/types/application';
+import {fetchUserSigninActivityUrl} from '@src/app/lib/activityService';
 
 type Props = {
   user: User;
@@ -43,7 +44,7 @@ class UserSingInActivityList extends React.Component<Props> {
                 </div>
               </div>
             </div>
-            <ActivityList pageable={true}/>
+            <ActivityList dataFetchUrl={fetchUserSigninActivityUrl} pageable={true}/>
           </div>
           : ''}
       </div>

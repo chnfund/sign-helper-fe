@@ -6,11 +6,12 @@ import {fetchActivity, pageNav, showActivityDetail} from '@src/app/reducers/acti
 import {Activity, AppState, Page} from '@src/types/application';
 
 type Props = {
+  dataFetchUrl: string;
   page: Page;
   focusUserId: number;
   pageable: boolean;
   activities: Activity[];
-  fetchActivityHandler: (userId: number, pageIndex: number) => any;
+  fetchActivityHandler: (dataFetchUrl: string, userId: number, pageIndex: number) => any;
   pageNavHandler: any;
   showActivityDetailHandler: any;
 };
@@ -19,9 +20,9 @@ class ActivityList extends React.Component<Props> {
 
   componentDidMount() {
     if (this.props.focusUserId !== null) {
-      this.props.fetchActivityHandler(this.props.focusUserId, 1);
+      this.props.fetchActivityHandler(this.props.dataFetchUrl, this.props.focusUserId, 1);
     } else {
-      this.props.fetchActivityHandler(null, 1);
+      this.props.fetchActivityHandler(this.props.dataFetchUrl, null, 1);
     }
   }
 

@@ -18,7 +18,7 @@ const loadMeeting = (meetings) => ({type: LOAD_MEETING, payload: meetings});
 export const activePage = (id) => ({type: ACTIVITY_LIST_GO_TO_PAGE, payload: id});
 
 export const focusUser = (userId) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(showMessage('开始载入选择用户的信息...'));
     userApi.getUserById(userId).then(
       res => handleErrors(res, dispatch, (filterRes) => {
@@ -29,10 +29,10 @@ export const focusUser = (userId) => {
   };
 };
 
-export const fetchActivity = (userId, pageIndex) => {
+export const fetchActivity = (fetchUrl, userId, pageIndex) => {
   return (dispatch) => {
     dispatch(showMessage('开始载入会议信息...'));
-    getActivities(userId, pageIndex)
+    getActivities(fetchUrl, userId, pageIndex)
       .then(
         res => handleErrors(res, dispatch, (filterRes) => {
           if (filterRes.data.data.list != null && filterRes.data.data.list.length > 0) {
@@ -46,7 +46,7 @@ export const fetchActivity = (userId, pageIndex) => {
   };
 };
 
-export const pageNav = (pageIndex) => {
+export const pageNav = (fetchUrl, pageIndex) => {
   return (dispatch, getState) => {
     const {activityLogic} = getState();
     let currentPageIndex = activityLogic.page.currentPageIndex;
@@ -65,7 +65,7 @@ export const pageNav = (pageIndex) => {
         currentPageIndex = Number(pageIndex);
     }
 
-    getActivities(activityLogic.focusUserId, currentPageIndex)
+    getActivities(fetchUrl, activityLogic.focusUserId, currentPageIndex)
       .then(res => handleErrors(res, dispatch, (filterRes) => {
         if (filterRes.data.data.list.length === 0) {
           if (pageIndex === '-1') {
@@ -83,14 +83,14 @@ export const pageNav = (pageIndex) => {
 };
 
 export const showActivityDetail = (meetingId) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(pushPath(`/application/auth-wait/activities/activity-detail/${meetingId}`));
   };
 };
 
 export const focusActivity = (activityId) => {
-  return (dispatch, getState) => {
-    dispatch(showMessage('开始载入会议详情信息...'))
+  return (dispatch) => {
+    dispatch(showMessage('开始载入会议详情信息...'));
     getActivityDetailById(activityId).then(
       res => handleErrors(res, dispatch, (filterRes) => {
         dispatch({

@@ -1,6 +1,8 @@
+import axios from 'axios';
+
 import {showMessage} from '@src/app/reducers/message';
 import {pushPath} from '@src/app/reducers/tab';
-import {SYS_CODE, TOKEN_KEY} from '@src/commons/const';
+import {HTTP_METHOD, SYS_CODE, TOKEN_KEY} from '@src/commons/const';
 import {AxiosResponse} from 'axios';
 
 export const headerWithToken = (otherHeader) => ({
@@ -47,4 +49,34 @@ export const convertToParams = (obj: object) => {
     }
   }
   return str;
+};
+
+export const httpTemplate = (method, fetchUrl, data, header, token) => {
+  let tmpMethod = null;
+  let urlParam = {};
+  switch (method) {
+    case HTTP_METHOD.GET:
+      tmpMethod = axios.get;
+      urlParam = {...data};
+      data = {};
+      break;
+    case HTTP_METHOD.POST:
+      tmpMethod = axios.post;
+      break;
+    case HTTP_METHOD.DELETE:
+      tmpMethod = axios.post;
+      break;
+    case HTTP_METHOD.PATCH:
+      tmpMethod = axios.post;
+      break;
+    case HTTP_METHOD.PUT:
+      tmpMethod = axios.post;
+      break;
+  }
+
+  return tmpMethod(`${fetchUrl}${urlParam}`, data, {
+    headers: headerWithToken({
+      ...header,
+    }),
+  });
 };

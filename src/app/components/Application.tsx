@@ -20,6 +20,7 @@ import ActivityDetail from '@src/app/components/ActivityDetail';
 import ActivityList from '@src/app/components/ActivityList';
 import UserAuthList from '@src/app/components/UserAuthList';
 import UserSingInActivityList from '@src/app/components/UserSingInActivityList';
+import {fetchActivityUrl} from '@src/app/lib/activityService';
 import {logout} from '@src/app/reducers/security';
 import {LOGIN_PHONE_NUMBER, USER_AUTH_STATE} from '@src/commons/const';
 import {Activity, AppState, TabItem} from '@src/types/application';
@@ -102,7 +103,7 @@ class Application extends React.Component<Props> {
               exact={true}
               path="/application/auth-wait/activities"
               render={() => (
-                <ActivityList pageable={true}/>
+                <ActivityList dataFetchUrl={fetchActivityUrl} pageable={true}/>
               )}
             />
             <Route

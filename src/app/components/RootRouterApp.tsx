@@ -10,8 +10,8 @@ import Login from '@src/app/components/Login';
 import Message from '@src/app/components/Message';
 import Root from '@src/app/components/Root';
 import {verifyToken} from '@src/app/reducers/security';
-import {AppState} from '@src/types/application';
 import {MESSAGE_TYPE} from '@src/commons/const';
+import {AppState} from '@src/types/application';
 
 type Props = {
   history: History;
