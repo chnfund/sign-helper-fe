@@ -2,9 +2,9 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 
 import ActivityList from '@src/app/components/ActivityList';
+import {fetchUserSigninActivityUrl} from '@src/app/lib/activityService';
 import {focusUser} from '@src/app/reducers/activity';
 import {AppState, User} from '@src/types/application';
-import {fetchUserSigninActivityUrl} from '@src/app/lib/activityService';
 
 type Props = {
   user: User;

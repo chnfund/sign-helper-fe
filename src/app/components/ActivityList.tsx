@@ -28,12 +28,17 @@ class ActivityList extends React.Component<Props> {
 
   render() {
     const {
+      dataFetchUrl,
       page,
       pageable,
       activities,
       pageNavHandler,
       showActivityDetailHandler,
     } = this.props;
+
+    const pageNavHandlerWrapper = (pageIndex) => {
+      return pageNavHandler(dataFetchUrl, pageIndex);
+    };
 
     return (
       <div>
@@ -46,31 +51,35 @@ class ActivityList extends React.Component<Props> {
             </div>
           )
           : activities.map(meeting => (
-          <div key={meeting.id} className="table-row content-row" onClick={() => showActivityDetailHandler(meeting.id)}>
-            <div className="table-row-part flex-d-row">
-              <div className="float-left">
-                <div className="flex-1 activity-text-row">
-                  {meeting.title.substring(0, 20)}
+            <div
+              key={meeting.id}
+              className="table-row content-row"
+              onClick={() => showActivityDetailHandler(meeting.id)}
+            >
+              <div className="table-row-part flex-d-row">
+                <div className="float-left">
+                  <div className="flex-1 activity-text-row">
+                    {meeting.title.substring(0, 20)}
+                  </div>
+                  <div className="flex-1 activity-text-row">
+                    发布人: {meeting.position} {meeting.fullName}
+                  </div>
                 </div>
-                <div className="flex-1 activity-text-row">
-                  发布人: {meeting.position} {meeting.fullName}
+              </div>
+              <div className="table-row-part">
+                <div className="float-right">
+                  <div className="flex-1 activity-text-row text-align-right">
+                    {meeting.showTime}
+                  </div>
+                  <div className="flex-1 activity-text-row text-align-right">
+                    签到人数: {meeting.signinNumber}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="table-row-part">
-              <div className="float-right">
-                <div className="flex-1 activity-text-row text-align-right">
-                  {meeting.showTime}
-                </div>
-                <div className="flex-1 activity-text-row text-align-right">
-                  签到人数: {meeting.signinNumber}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
         {pageable ?
-          <Pagination className="normal-list-pagination" page={page} clickHandler={pageNavHandler}/>
+          <Pagination className="normal-list-pagination" page={page} clickHandler={pageNavHandlerWrapper}/>
           : ''
         }
       </div>
