@@ -122,11 +122,12 @@ class UserAuthList extends React.Component<Props> {
           : users.map(user => (
             <div key={user.id} className="table-row content-row">
               <div className="table-row-part flex-d-row">
-                <img
-                  className="company-card-img-holder float-left"
-                  src={user.businessCard !== null ? user.businessCard : noBusinessCardImg}
-                />
-                {noBusinessCardImg}
+                <a href={user.businessCard !== null ? user.businessCard : '#'} target="_blank">
+                  <img
+                    className="company-card-img-holder float-left"
+                    src={user.businessCard !== null ? user.businessCard : noBusinessCardImg}
+                  />
+                </a>
                 <div className="custom-info float-left">
                   <div className="flex-1">
                     {user.companyType === COMPANY_TYPE.Insti ? user.companySubTypeName : '上市公司'}
